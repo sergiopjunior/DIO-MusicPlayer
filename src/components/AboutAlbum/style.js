@@ -1,5 +1,5 @@
-import React, { Component} from 'react';
-import { View, Image, StyleSheet, Text, TouchableOpacity } from "react-native";
+import React from 'react';
+import { View, Image, StyleSheet, Text} from "react-native";
 import { getWidth, normalize } from '../../assets/js/functions';
 
 const imageUrl = "../../assets/images/temp.png"

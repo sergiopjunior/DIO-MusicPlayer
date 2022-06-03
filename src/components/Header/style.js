@@ -1,5 +1,5 @@
-import React, { Component} from 'react';
-import { View, Image, StyleSheet, Text, TouchableOpacity } from "react-native";
+import React from 'react';
+import { View, Image, StyleSheet, TouchableOpacity } from "react-native";
 import { normalize } from '../../assets/js/functions';
 import { Feather } from "react-native-vector-icons"
 import { SheetManager } from 'react-native-actions-sheet';
@@ -10,7 +10,7 @@ export default function Container() {
     return (
       <View style={style.container}>
         <Image style={style.image} source={require(imageUrl)}></Image>
-        <TouchableOpacity style={style.button} onPress={() => SheetManager.show("helloworld_sheet")}>
+        <TouchableOpacity style={style.button} onPress={() => SheetManager.show("listaudio_sheet")}>
             <Feather name="list" size={normalize(25)} color="white"></Feather>
         </TouchableOpacity>
       </View>
