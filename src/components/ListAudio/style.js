@@ -4,14 +4,16 @@ import { getWidth, normalize } from '../../assets/js/functions';
 import { useAudio } from '../../hooks/audio';
 import { Entypo, AntDesign } from '@expo/vector-icons'; 
 import { Colors } from '../../assets/js/constants';
+import { SheetManager } from 'react-native-actions-sheet';
+import OptionModal from '../OptionModal';
 
 const imageUrl = "../../assets/images/sound.png"
 
 export default function ItemContainer() {
-    const {playList} = useAudio();
-
+    const {playList, OpenOptionModal} = useAudio();
+    
     const RenderItem = ({ item }) => { 
-        return (
+      return (
             <View style={style.itemContainer}>
                 <TouchableOpacity style={style.leftContainer}>
                   <View style={style.thumbnail}>            
@@ -22,11 +24,11 @@ export default function ItemContainer() {
                         <Text style={style.itemInfoDuration}>{item.duration}</Text>
                   </View>
                 </TouchableOpacity>
-                <TouchableOpacity>
+                <TouchableOpacity onPress={() => OpenOptionModal(item)}>
                   <View style={style.rightConainer}>
                     <Entypo name="dots-three-vertical" size={normalize(20)} color={Colors.audio_more_info} />
                   </View>  
-                </TouchableOpacity>                                       
+                </TouchableOpacity>                                    
             </View>
           )
     };

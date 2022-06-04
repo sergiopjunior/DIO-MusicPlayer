@@ -31,15 +31,25 @@ const getPermission = async () => {
 
 async function generateData(files) {
     let data = [];
+    
+    const filterFileName = (str) => {
+      let spl = str.split('.');
+      let name = str.replace("." + spl.slice(-1), "")
+      let format = spl.slice(-1).join("");
+      return {name: name, format: format};
+		};
 
     for (let i = 0; i < files.totalCount; i++) {
-        var date = new Date(files.assets[i]["modificationTime"]);
-        var datestring = `${date.getDay()}/${date.getMonth()}/${date.getFullYear()}`
+        let date = new Date(files.assets[i]["modificationTime"]);
+        let datestring = `${date.getDay()}/${date.getMonth()}/${date.getFullYear()}`
+        let temp = filterFileName(files.assets[i]["filename"]);
+
         data.push({
             id: files.assets[i]["id"],
-            title: files.assets[i]["filename"],
+            title: temp.name,
             date: datestring,
-            duration: parseFloat(files.assets[i]["duration"] / 60).toFixed(2)
+            duration: parseFloat(files.assets[i]["duration"] / 60).toFixed(2),
+            format: temp.format,
         })
     }
 

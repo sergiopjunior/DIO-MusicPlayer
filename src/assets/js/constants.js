@@ -1,5 +1,7 @@
 export class Colors {
-    static light_black = "rgba(0, 0, 0, 0.774)";
+    static light_black = "rgb(58, 58, 58)";
+    static light_black_darker = "rgb(45, 45, 45)";
+    static modal_background = "rgba(0, 0, 0, 0.5)";
 
     // Header
     static audio_menu_icon = "white";

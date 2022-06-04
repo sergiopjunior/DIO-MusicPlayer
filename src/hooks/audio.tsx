@@ -7,9 +7,23 @@ const AudioContext = createContext({});
 const AudioProvider: React.FC = ({children}) => {
     const [currentAudio, setCurrentAudio] = useState();
     const [currentAudioInfo, setCurrentAudioInfo] = useState();
+    const [selectedAudio, setSelectedAudio] = useState({});
+    const [optionModalSate, setOptionModalState] = useState(false);
     const [isPlay, setIsPlay] = useState(false);
     const [playList, setPlayList] = useState([{}]);
+    
+    function CloseOptionModal() {
+        setOptionModalState(false);
+    };
 
+    function OpenOptionModal(item = {}) {
+        if (item) {
+            setSelectedAudio(item);
+            setOptionModalState(true);
+        }
+    }
+
+    //console.log(selectedAudio);
     const PlaySong = async (source, autoPlay = false) => {
         if (currentAudio) {
             
@@ -29,7 +43,13 @@ const AudioProvider: React.FC = ({children}) => {
     }, []);
 
     return (
-        <AudioContext.Provider value={{currentAudio, playList}}>{children}</AudioContext.Provider>
+        <AudioContext.Provider value={{currentAudio, 
+            playList, 
+            selectedAudio, 
+            optionModalSate, 
+            CloseOptionModal, 
+            OpenOptionModal}}
+            >{children}</AudioContext.Provider>
     );
 };
 
