@@ -1,17 +1,18 @@
 import React from 'react';
 import { View, Image, StyleSheet, TouchableOpacity } from "react-native";
 import { normalize } from '../../assets/js/functions';
-import { Feather } from "react-native-vector-icons"
+import { SimpleLineIcons } from "react-native-vector-icons"
 import { SheetManager } from 'react-native-actions-sheet';
+import { Colors } from '../../assets/js/constants';
 
-const imageUrl = "../../assets/images/favicon.png"
+const imageUrl = "../../assets/images/icon.png"
 
 export default function Container() {
     return (
       <View style={style.container}>
         <Image style={style.image} source={require(imageUrl)}></Image>
         <TouchableOpacity style={style.button} onPress={() => SheetManager.show("listaudio_sheet")}>
-            <Feather name="list" size={normalize(25)} color="white"></Feather>
+          <SimpleLineIcons name="playlist" size={normalize(24)} color={Colors.audio_menu_icon} />
         </TouchableOpacity>
       </View>
     );
@@ -31,9 +32,10 @@ const style = StyleSheet.create({
     height: normalize(25),
   },
   button: {
-    width: normalize(25),
-    height: normalize(25),
+    width: normalize(33),
+    height: normalize(33),
     alignItems: "center",
     justifyContent: "center",
+    paddingTop: 4,
   },
 });

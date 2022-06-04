@@ -33,13 +33,13 @@ async function generateData(files) {
     let data = [];
 
     for (let i = 0; i < files.totalCount; i++) {
-        // console.log(files.assets[i]["id"], files.assets[i]["filename"], files.assets[i]["modificationTime"]);
         var date = new Date(files.assets[i]["modificationTime"]);
         var datestring = `${date.getDay()}/${date.getMonth()}/${date.getFullYear()}`
         data.push({
             id: files.assets[i]["id"],
             title: files.assets[i]["filename"],
-            date: datestring
+            date: datestring,
+            duration: parseFloat(files.assets[i]["duration"] / 60).toFixed(2)
         })
     }
 

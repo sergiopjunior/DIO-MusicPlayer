@@ -5,8 +5,16 @@ import GetAudioFiles from "../services/api";
 const AudioContext = createContext({});
 
 const AudioProvider: React.FC = ({children}) => {
-    const [audio, setAudio] = useState("test");
+    const [currentAudio, setCurrentAudio] = useState();
+    const [currentAudioInfo, setCurrentAudioInfo] = useState();
+    const [isPlay, setIsPlay] = useState(false);
     const [playList, setPlayList] = useState([{}]);
+
+    const PlaySong = async (source, autoPlay = false) => {
+        if (currentAudio) {
+            
+        }
+    };
 
     useEffect(() => {
         async function loadAudio() {
@@ -21,7 +29,7 @@ const AudioProvider: React.FC = ({children}) => {
     }, []);
 
     return (
-        <AudioContext.Provider value={{audio, playList}}>{children}</AudioContext.Provider>
+        <AudioContext.Provider value={{currentAudio, playList}}>{children}</AudioContext.Provider>
     );
 };
 

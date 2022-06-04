@@ -1,7 +1,9 @@
 import React from 'react';
-import { View, Image, StyleSheet, Text, ScrollView, FlatList } from "react-native";
-import { normalize } from '../../assets/js/functions';
+import { View, TouchableOpacity, StyleSheet, Text, ScrollView, FlatList } from "react-native";
+import { getWidth, normalize } from '../../assets/js/functions';
 import { useAudio } from '../../hooks/audio';
+import { Entypo, AntDesign } from '@expo/vector-icons'; 
+import { Colors } from '../../assets/js/constants';
 
 const imageUrl = "../../assets/images/sound.png"
 
@@ -11,11 +13,20 @@ export default function ItemContainer() {
     const RenderItem = ({ item }) => { 
         return (
             <View style={style.itemContainer}>
-                <Image source={require(imageUrl)} style={style.imageAlbum}/>
-                <View style={style.itemInfoContainer}>
-                    <Text style={style.itemInfoTitle}>{item.title}</Text>
-                    <Text style={style.itemInfoData}>{item.date}</Text>
-                </View>
+                <TouchableOpacity style={style.leftContainer}>
+                  <View style={style.thumbnail}>            
+                      <AntDesign name="playcircleo" size={normalize(35)} color={Colors.audio_thumbnail} />
+                  </View>   
+                  <View style={style.itemInfoContainer}>
+                        <Text numberOfLines={1} style={style.itemInfoTitle}>{item.title}</Text>
+                        <Text style={style.itemInfoDuration}>{item.duration}</Text>
+                  </View>
+                </TouchableOpacity>
+                <TouchableOpacity>
+                  <View style={style.rightConainer}>
+                    <Entypo name="dots-three-vertical" size={normalize(20)} color={Colors.audio_more_info} />
+                  </View>  
+                </TouchableOpacity>                                       
             </View>
           )
     };
@@ -36,37 +47,54 @@ const style = StyleSheet.create({
   itemContainer: {
     // View
     flexDirection: "row",
-    margin: 5,
-    //marginTop: 30,
+    margin: 3,
+    alignSelf: "center",
+    alignItems: "center",
+    width: getWidth() - 40,
+    //backgroundColor: "red",
+  },
+  leftContainer: {  
+    flex: 1,
+    flexDirection: "row",
+    alignItems: "center",
+    //backgroundColor: "blue",
+  },
+  rightConainer: {
+    //backgroundColor: "green",
   },
   itemInfoContainer: {
     // View
+    flex: 1,
     paddingLeft: 10,
-    justifyContent: "space-between",
-    width: "100%",
+    //backgroundColor: "black",
   },
   itemInfoTitle: {
     // Text
-    fontSize: normalize(20),
+    fontSize: normalize(17),
     fontWeight: "700",
-    color: "white",
-    width: "80%",
+    color: Colors.audio_title,
+    width: getWidth() - 130,
+    marginBottom: 1,
   },
-  itemInfoData: {
+  itemInfoDuration: {
     // Text
-    fontSize: normalize(15),
+    fontSize: normalize(13),
     fontWeight: "300",
-    color: "rgba(255, 255, 255, 255.5)",
+    color: Colors.audio_date,
   },
-  imageAlbum: {
+  thumbnail: {
     // Image
-    width: normalize(75),
-    height: normalize(75),
+    width: normalize(50),
+    height: normalize(50),
+    alignItems:"center",
+    justifyContent: "center",
+    //backgroundColor: "orange",
   },
   separator: {
     // View
     width: "100%",
     height: 1,
-    backgroundColor: "rgba(255, 255, 255, 255.5)",
+    backgroundColor: Colors.list_separator,
+    marginTop: 5,
   },
 });

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { View, ScrollView } from 'react-native';
 import Header from '../../components/Header';
 import Album from '../../components/AboutAlbum';
@@ -8,7 +8,6 @@ import { getHeight } from '../../assets/js/functions';
 import ListAudio from '../../components/ListAudio';
 
 const Player: React.FC = () => {
-  const [playList, setPlayList] = useState({});
 
   return (
     <View>
