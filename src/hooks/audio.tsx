@@ -1,7 +1,6 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { Audio } from "expo-av";
 import GetAudioFiles from "../services/api";
-import { Sound } from "expo-av/build/Audio";
 
 const AudioContext = createContext({});
 

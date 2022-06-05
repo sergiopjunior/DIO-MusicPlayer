@@ -1,7 +1,7 @@
 import React, { Component} from 'react';
 import { View, Image, StyleSheet, TouchableOpacity } from "react-native";
 import { getWidth, normalize } from '../../assets/js/functions';
-import { AntDesign, Feather } from "react-native-vector-icons"
+import { AntDesign } from '@expo/vector-icons';
 import { Colors } from '../../assets/js/constants';
 import { useAudio } from '../../hooks/audio';
 

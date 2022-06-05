@@ -1,6 +1,4 @@
-import React, { useEffect } from 'react';
 import { Alert } from 'react-native';
-import MusicFiles from 'react-native-get-music-files';
 import * as MediaLibrary from 'expo-media-library';
 
 function permissionAlert() {
