@@ -5,24 +5,27 @@ import { normalize } from '../../assets/js/functions';
 import { useAudio } from '../../hooks/audio';
 
 export default function Container({ visible, onClose }) {
-    const {selectedAudio} = useAudio();
+    const {selectedAudio, PlayAudio} = useAudio();
 
     return (
         <Modal animationType="slide" transparent visible={visible}>
             <View style={style.container}>
                     <View style={style.infoContainer}>
-                    <Text style={style.textH1}>Nome:</Text>
-                    <Text style={style.text}>{selectedAudio.title}</Text>
+                        <Text style={style.textH1}>Nome:</Text>
+                        <Text style={style.text}>{selectedAudio.title}</Text>
                     </View>
+                    
                     <View style={style.separator} />
                     <View style={style.infoContainer}>
-                    <Text style={style.textH1}>Formato:</Text>
-                    <Text style={style.text}>{selectedAudio.format}</Text>
+                        <Text style={style.textH1}>Formato:</Text>
+                        <Text style={style.text}>{selectedAudio.format}</Text>
                     </View>
+
                     <View style={style.separator} />
-                    <TouchableOpacity style={style.buttonContainer}>
+                    <TouchableOpacity onPress={() => PlayAudio(selectedAudio)} style={style.buttonContainer}>
                         <Text style={style.button}>Play</Text>
                     </TouchableOpacity>
+
                     <View style={style.separator} />
                     <TouchableOpacity style={style.buttonContainer}>
                         <Text style={style.button}>Adicionar à Playlist</Text>

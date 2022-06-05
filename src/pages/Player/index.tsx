@@ -24,20 +24,6 @@ const Player: React.FC = () => {
           padding: 20,
           }}>
            <ListAudio/>
-           <ActionSheet onBeforeShow={(data) => selectedItem = data} id="audioinfo_sheet" containerStyle={{
-              backgroundColor: Colors.light_black, 
-              height: 200,
-              padding: 20,
-              }}>
-                <View>
-                  <Text>Nome</Text>
-                  <Text>Arquivo de Áudio</Text>
-                </View>
-                <View>
-                  <Text>Formato</Text>
-                  <Text>mp3</Text>
-                </View>
-            </ActionSheet>
         </ActionSheet>
         <OptionModal visible={true}/>
     </View>

@@ -12,4 +12,7 @@ export class Colors {
     static audio_date = "rgba(255, 255, 255, 0.8)";
     static list_separator = "rgba(255, 255, 255, 0.3)";
     static audio_more_info = "rgba(255, 255, 255, 0.7)";
+
+    // AudioPlayer
+    static audio_player = "white";
 }

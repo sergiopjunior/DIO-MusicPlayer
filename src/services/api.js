@@ -50,6 +50,7 @@ async function generateData(files) {
             date: datestring,
             duration: parseFloat(files.assets[i]["duration"] / 60).toFixed(2),
             format: temp.format,
+            uri: files.assets[i]["uri"],
         })
     }
 

@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { Audio } from "expo-av";
 import GetAudioFiles from "../services/api";
+import { Sound } from "expo-av/build/Audio";
 
 const AudioContext = createContext({});
 
@@ -9,7 +10,6 @@ const AudioProvider: React.FC = ({children}) => {
     const [currentAudioInfo, setCurrentAudioInfo] = useState();
     const [selectedAudio, setSelectedAudio] = useState({});
     const [optionModalSate, setOptionModalState] = useState(false);
-    const [isPlay, setIsPlay] = useState(false);
     const [playList, setPlayList] = useState([{}]);
     
     function CloseOptionModal() {
@@ -21,13 +21,50 @@ const AudioProvider: React.FC = ({children}) => {
             setSelectedAudio(item);
             setOptionModalState(true);
         }
+    };
+
+    async function PlayAudio(audio = {}) {
+        setCurrentAudioInfo(audio);
+
+        if (Object.keys(audio).length > 0) {
+            //console.log("Playing new Audio", audio.title);
+            Play(audio.uri);
+        }
+        else if (currentAudio) {
+            const status = await currentAudio.getStatusAsync();
+            if (status.isPlaying){
+                //console.log("Pause Áudio", currentAudioInfo);
+                Pause()     
+            }
+            else if (status.isLoaded) {     
+                //console.log("Resume Audio", currentAudioInfo.title);
+                Resume();  
+            } 
+        }
+        else {   
+            console.log("Nenhum áudio selecionado");
+        }
     }
 
-    //console.log(selectedAudio);
-    const PlaySong = async (source, autoPlay = false) => {
-        if (currentAudio) {
-            
+    async function Play(source) {
+        if (!currentAudio)
+        {
+            const sound = new Audio.Sound();
+            await sound.loadAsync({uri: source}, {shouldPlay: true});
+            setCurrentAudio(sound);
         }
+        else {
+            currentAudio.unloadAsync();
+            await currentAudio.loadAsync({uri: source}, {shouldPlay: true});
+        }
+    };
+
+    async function Resume() {
+        await currentAudio.setStatusAsync({shouldPlay: true});
+    }
+
+    async function Pause() {
+        await currentAudio.setStatusAsync({shouldPlay: false}); 
     };
 
     useEffect(() => {
@@ -48,8 +85,10 @@ const AudioProvider: React.FC = ({children}) => {
             selectedAudio, 
             optionModalSate, 
             CloseOptionModal, 
-            OpenOptionModal}}
-            >{children}</AudioContext.Provider>
+            OpenOptionModal,
+            PlayAudio,
+            }}
+        >{children}</AudioContext.Provider>
     );
 };
 

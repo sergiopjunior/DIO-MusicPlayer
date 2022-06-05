@@ -10,12 +10,12 @@ import OptionModal from '../OptionModal';
 const imageUrl = "../../assets/images/sound.png"
 
 export default function ItemContainer() {
-    const {playList, OpenOptionModal} = useAudio();
+    const {playList, OpenOptionModal, PlayAudio} = useAudio();
     
     const RenderItem = ({ item }) => { 
       return (
             <View style={style.itemContainer}>
-                <TouchableOpacity style={style.leftContainer}>
+                <TouchableOpacity onPress={() => PlayAudio(item)} style={style.leftContainer}>
                   <View style={style.thumbnail}>            
                       <AntDesign name="playcircleo" size={normalize(35)} color={Colors.audio_thumbnail} />
                   </View>   
