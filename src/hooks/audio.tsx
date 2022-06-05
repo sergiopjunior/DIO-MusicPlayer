@@ -11,6 +11,7 @@ const AudioProvider: React.FC = ({children}) => {
     const [selectedAudio, setSelectedAudio] = useState({});
     const [optionModalSate, setOptionModalState] = useState(false);
     const [playList, setPlayList] = useState([{}]);
+    const [isPlay, setIsPlay] = useState(true);
     
     function CloseOptionModal() {
         setOptionModalState(false);
@@ -51,19 +52,23 @@ const AudioProvider: React.FC = ({children}) => {
             const sound = new Audio.Sound();
             await sound.loadAsync({uri: source}, {shouldPlay: true});
             setCurrentAudio(sound);
+            setIsPlay(true);
         }
         else {
             currentAudio.unloadAsync();
             await currentAudio.loadAsync({uri: source}, {shouldPlay: true});
         }
+        setIsPlay(true);
     };
 
     async function Resume() {
         await currentAudio.setStatusAsync({shouldPlay: true});
+        setIsPlay(true);
     }
 
     async function Pause() {
         await currentAudio.setStatusAsync({shouldPlay: false}); 
+        setIsPlay(false);
     };
 
     useEffect(() => {
@@ -84,6 +89,7 @@ const AudioProvider: React.FC = ({children}) => {
             selectedAudio, 
             optionModalSate,
             currentAudioInfo, 
+            isPlay,
             CloseOptionModal, 
             OpenOptionModal,
             PlayAudio,
