@@ -1,13 +1,16 @@
 import React from 'react';
 import { View, Image, StyleSheet, Text} from "react-native";
 import { getWidth, normalize } from '../../assets/js/functions';
+import { useAudio } from '../../hooks/audio';
 
 const imageUrl = "../../assets/images/temp.png"
 
 export default function Container() {
-    return (
+  const {currentAudioInfo} =  useAudio();
+
+  return (
       <View style={style.container}>
-        <Text style={style.title}>Selecione um áudio</Text>
+        <Text style={style.title}>{currentAudioInfo?.title || "Selecione um Áudio"}</Text>
         <Image source={require(imageUrl)} style={style.album}></Image>
       </View>
     );
