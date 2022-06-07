@@ -23,6 +23,26 @@ const AudioProvider: React.FC = ({children}) => {
         }
     };
 
+    async function NextAudio() {
+        if (currentAudio) {
+            if (currentAudioInfo.playListId == playList.length - 1){
+                setCurrentAudioInfo(playList.slice(0)[0]);
+                LoadNewAudio(playList.slice(0)[0]);
+            }
+            else {
+                setCurrentAudioInfo(playList.slice(currentAudioInfo.playListId + 1)[0]);
+                LoadNewAudio(playList.slice(currentAudioInfo.playListId + 1)[0]);
+            }
+        }
+    };
+
+    async function PrevAudio() {
+        if (currentAudio) {
+            setCurrentAudioInfo(playList.slice(currentAudioInfo.playListId - 1)[0]);
+            LoadNewAudio(playList.slice(currentAudioInfo.playListId - 1)[0]);
+        }
+    };
+
     async function PlayAudio(audio = {}) {
         if (Object.keys(audio).length > 0) {
             //console.log("Playing new Audio", audio.title);
@@ -54,7 +74,7 @@ const AudioProvider: React.FC = ({children}) => {
             setIsPlay(true);
         }
         else {
-            currentAudio.unloadAsync();
+            await currentAudio.unloadAsync();
             await currentAudio.loadAsync({uri: source}, {shouldPlay: true});
         }
         setIsPlay(true);
@@ -68,6 +88,15 @@ const AudioProvider: React.FC = ({children}) => {
     async function Pause() {
         await currentAudio.setStatusAsync({shouldPlay: false}); 
         setIsPlay(false);
+    };
+
+    async function LoadNewAudio(audio) {
+        if (currentAudio) {
+            //console.log("Loading new Audio", audio);
+            const status = await currentAudio.getStatusAsync();
+            currentAudio.unloadAsync();
+            await currentAudio.loadAsync({uri: audio.uri}, {shouldPlay: status.isPlaying});
+        }
     };
 
     useEffect(() => {
@@ -92,6 +121,8 @@ const AudioProvider: React.FC = ({children}) => {
             CloseOptionModal, 
             OpenOptionModal,
             PlayAudio,
+            NextAudio,
+            PrevAudio,
             }}
         >{children}</AudioContext.Provider>
     );

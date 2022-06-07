@@ -8,18 +8,18 @@ import { useAudio } from '../../hooks/audio';
 const imageUrl = "../../assets/images/temp.png"
 
 export default function Container() {
-    const {isPlay, PlayAudio, currentAudio} = useAudio();
+    const {isPlay, PlayAudio, NextAudio, PrevAudio, currentAudio} = useAudio();
 
     return (
       <View style={style.container}>
         <View style={style.buttonContainer}>
-            <TouchableOpacity style={style.buttonAction}>
+            <TouchableOpacity onPress={() => PrevAudio()} style={style.buttonAction}>
               <AntDesign name="banckward" size={normalize(23)} color={Colors.audio_player}/>
             </TouchableOpacity>
             <TouchableOpacity onPress={() => PlayAudio()} style={style.buttonActionPrimay}>
               <AntDesign name={isPlay && currentAudio ? "pausecircleo" : "playcircleo"} size={50} color={Colors.audio_player}/>
             </TouchableOpacity>
-            <TouchableOpacity style={style.buttonAction}>
+            <TouchableOpacity onPress={() => NextAudio()} style={style.buttonAction}>
               <AntDesign name="forward" size={normalize(23)} color={Colors.audio_player}/>
             </TouchableOpacity>
         </View>

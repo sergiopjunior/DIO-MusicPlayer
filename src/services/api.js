@@ -43,6 +43,7 @@ async function generateData(files) {
         let temp = filterFileName(files.assets[i]["filename"]);
 
         data.push({
+            playListId: i,
             id: files.assets[i]["id"],
             title: temp.name,
             date: datestring,
