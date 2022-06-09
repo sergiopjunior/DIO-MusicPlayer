@@ -7,6 +7,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Player from "../../pages/Player";
 import ListAudio from "../ListAudio";
 import Playlist from "../../pages/Playlist";
+import { useAudio } from "../../hooks/audio";
 
 const Tab = createBottomTabNavigator();
    /*<View style={style.container}>
@@ -28,27 +29,32 @@ const Tab = createBottomTabNavigator();
         </View>*/
 
 export default function Container() {
+    const {audiosFound} = useAudio();
+
     return (
         <Tab.Navigator initialRouteName="Player" screenOptions={({ route }) => ({
+            tabBarStyle: {backgroundColor: Colors.tabBarColor, height: 60},
             tabBarIcon: ({ focused}) => {
                 let iconName;
-                let color = focused ? Colors.text_focus_colr : Colors.text_color;
+                let color = focused ? Colors.tabBarIconFocusColor : Colors.tabBarIconColor
               
                 if (route.name === "Playlist")
                     return <MaterialIcons name="library-music" size={normalize(24)} color={color} />;
 
-                if (route.name === 'AudioList')
+                if (route.name === 'Músicas')
                     iconName = 'headphones';
                 else if (route.name === 'Player')
                     iconName = "compact-disc";
 
                 return <FontAwesome5 name={iconName} size={normalize(24)} color={color} />;
             },
-            tabBarActiveTintColor: 'black',
-            tabBarInactiveTintColor: 'black',
+            tabBarLabelStyle: {fontSize: 15},
+            tabBarActiveTintColor: Colors.tabBarLabelFocusColor,
+            tabBarInactiveTintColor: Colors.tabBarLabelColor, 
+            tabBarBadgeStyle: {color: Colors.tabBarBadgeTextColor, backgroundColor: Colors.tabBarBadgeColor, fontSize: normalize(15), alignItems: "center", justifyContent: "center" }, 
             headerShown: false,
           })}>
-            <Tab.Screen name="AudioList" component={ListAudio}/>
+            <Tab.Screen name="Músicas" component={ListAudio} options={{ tabBarBadge: audiosFound }}/>
             <Tab.Screen name="Player" component={Player}/>
             <Tab.Screen name="Playlist" component={Playlist}/>
         </Tab.Navigator>

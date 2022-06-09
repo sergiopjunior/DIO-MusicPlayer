@@ -11,6 +11,7 @@ const AudioProvider: React.FC = ({children}) => {
     const [optionModalSate, setOptionModalState] = useState(false);
     const [playList, setPlayList] = useState([{}]);
     const [isPlay, setIsPlay] = useState(true);
+    const [audiosFound, setAudiosFound] = useState(0);
     
     function CloseOptionModal() {
         setOptionModalState(false);
@@ -108,6 +109,7 @@ const AudioProvider: React.FC = ({children}) => {
            if (!result || result.length == 0) return;
            
            setPlayList(result);
+           setAudiosFound(result.length);
         };
 
         loadAudio();
@@ -118,7 +120,8 @@ const AudioProvider: React.FC = ({children}) => {
             playList, 
             selectedAudio, 
             optionModalSate,
-            currentAudioInfo, 
+            currentAudioInfo,
+            audiosFound,
             isPlay,
             CloseOptionModal, 
             OpenOptionModal,

@@ -17,7 +17,11 @@ export class Colors {
     static audio_player = "white";
 
     // Navigator
-    static navi_bg_color = "white";
-    static text_color = "black";
-    static text_focus_colr = "blue";
+    static tabBarColor = "white";
+    static tabBarIconColor = "rgb(58, 58, 58)";
+    static tabBarIconFocusColor = "blue";
+    static tabBarBadgeColor = "red";
+    static tabBarBadgeTextColor = "white"
+    static tabBarLabelColor = "rgb(58, 58, 58)";
+    static tabBarLabelFocusColor = "blue";
 }
