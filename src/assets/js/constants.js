@@ -15,4 +15,9 @@ export class Colors {
 
     // AudioPlayer
     static audio_player = "white";
+
+    // Navigator
+    static navi_bg_color = "white";
+    static text_color = "black";
+    static text_focus_colr = "blue";
 }

@@ -5,7 +5,7 @@ import { normalize } from '../../assets/js/functions';
 import { useAudio } from '../../hooks/audio';
 
 export default function Container({ visible, onClose }) {
-    const {selectedAudio, PlayAudio} = useAudio();
+    const {selectedAudio, PlayAudio, currentAudioInfo, isPLay} = useAudio();
 
     return (
         <Modal animationType="slide" transparent visible={visible}>
@@ -22,7 +22,7 @@ export default function Container({ visible, onClose }) {
                     </View>
 
                     <View style={style.separator} />
-                    <TouchableOpacity onPress={() => PlayAudio(selectedAudio)} style={style.buttonContainer}>
+                    <TouchableOpacity onPress={() => selectedAudio.id == currentAudioInfo.id ? PlayAudio() : PlayAudio(selectedAudio)} style={style.buttonContainer}>
                         <Text style={style.button}>Play</Text>
                     </TouchableOpacity>
 

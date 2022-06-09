@@ -6,6 +6,7 @@ Projeto feito para o desafio de projeto " Criando um Player de música com React
 #### Libs:
 
 - react-native-actionsheet
+- @react-navigation/bottom-tabs
 - expo-av
 - expo-media-library
 - @expo/vector-icons

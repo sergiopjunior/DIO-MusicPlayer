@@ -10,7 +10,7 @@ export default function Container() {
 
   return (
       <View style={style.container}>
-        <Text style={style.title}>{currentAudioInfo?.title || "Selecione um Áudio"}</Text>
+        <Text numberOfLines={1} style={style.title}>{currentAudioInfo?.title || "Selecione um Áudio"}</Text>
         <Image source={require(imageUrl)} style={style.album}></Image>
       </View>
     );

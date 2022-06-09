@@ -11,11 +11,9 @@ export default function Container() {
     return (
       <View style={style.container}>
         <Image style={style.image} source={require(imageUrl)}></Image>
-        <TouchableOpacity style={style.button} onPress={() => SheetManager.show("listaudio_sheet")}>
-          <SimpleLineIcons name="playlist" size={normalize(24)} color={Colors.audio_menu_icon} />
-        </TouchableOpacity>
       </View>
     );
+    test
 }
 
 const style = StyleSheet.create({

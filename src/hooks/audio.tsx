@@ -74,6 +74,7 @@ const AudioProvider: React.FC = ({children}) => {
             setIsPlay(true);
         }
         else {
+            await currentAudio.stopAsync();
             await currentAudio.unloadAsync();
             await currentAudio.loadAsync({uri: source}, {shouldPlay: true});
         }
@@ -94,7 +95,8 @@ const AudioProvider: React.FC = ({children}) => {
         if (currentAudio) {
             //console.log("Loading new Audio", audio);
             const status = await currentAudio.getStatusAsync();
-            currentAudio.unloadAsync();
+            await currentAudio.stopAsync();
+            await currentAudio.unloadAsync();
             await currentAudio.loadAsync({uri: audio.uri}, {shouldPlay: status.isPlaying});
         }
     };

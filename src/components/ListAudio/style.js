@@ -1,23 +1,22 @@
 import React from 'react';
-import { View, TouchableOpacity, StyleSheet, Text, ScrollView, FlatList } from "react-native";
+import { View, TouchableOpacity, StyleSheet, Text, ScrollView, FlatList, SafeAreaView } from "react-native";
 import { getWidth, normalize } from '../../assets/js/functions';
 import { useAudio } from '../../hooks/audio';
 import { Entypo, AntDesign } from '@expo/vector-icons'; 
 import { Colors } from '../../assets/js/constants';
-import { SheetManager } from 'react-native-actions-sheet';
 import OptionModal from '../OptionModal';
 
 const imageUrl = "../../assets/images/sound.png"
 
 export default function ItemContainer() {
-    const {playList, OpenOptionModal, PlayAudio} = useAudio();
+    const {playList, OpenOptionModal, currentAudioInfo, PlayAudio, isPlay} = useAudio();
     
     const RenderItem = ({ item }) => { 
       return (
             <View style={style.itemContainer}>
-                <TouchableOpacity onPress={() => PlayAudio(item)} style={style.leftContainer}>
+                <TouchableOpacity onPress={() => item.id == currentAudioInfo.id ? PlayAudio() : PlayAudio(item)} style={style.leftContainer}>
                   <View style={style.thumbnail}>            
-                      <AntDesign name="playcircleo" size={normalize(35)} color={Colors.audio_thumbnail} />
+                      <AntDesign name={item.id== currentAudioInfo.id && isPlay ? "pausecircleo" : "playcircleo"} size={normalize(35)} color={Colors.audio_thumbnail} />
                   </View>   
                   <View style={style.itemInfoContainer}>
                         <Text numberOfLines={1} style={style.itemInfoTitle}>{item.title}</Text>
@@ -34,18 +33,25 @@ export default function ItemContainer() {
     };
 
     return (
-      <ScrollView>
-          <FlatList 
-          data={playList} 
-          keyExtractor={item => item.id} 
-          ItemSeparatorComponent={() => <View style={style.separator}/>}
-          renderItem={item => <RenderItem {...item}/>}
-          />
-      </ScrollView>
+        <SafeAreaView style={style.listContainer}>
+            <FlatList 
+                data={playList} 
+                keyExtractor={item => item.id} 
+                ItemSeparatorComponent={() => <View style={style.separator}/>}
+                renderItem={item => <RenderItem {...item}/>}
+                ListFooterComponent={
+                  <OptionModal visible={true}/>
+                }
+            />  
+        </SafeAreaView>      
     );
 }
 
 const style = StyleSheet.create({
+  listContainer: {
+    paddingTop: 20,
+    backgroundColor: Colors.light_black,
+  },
   itemContainer: {
     // View
     flexDirection: "row",

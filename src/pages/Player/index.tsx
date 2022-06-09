@@ -6,27 +6,19 @@ import AudioPlayer from '../../components/AudioPlayer';
 import ActionSheet from "react-native-actions-sheet";
 import { getHeight } from '../../assets/js/functions';
 import ListAudio from '../../components/ListAudio';
-import OptionModal from '../../components/OptionModal';
 import { Colors } from '../../assets/js/constants';
+import PlayerContainer from './style';
 
 const Player: React.FC = () => {
   var selectedItem;
 
   return (
-    <View>
+    <PlayerContainer>
         <Header></Header>
         <Album></Album>
         <AudioPlayer></AudioPlayer>
         <ScrollView></ScrollView>
-        <ActionSheet id="listaudio_sheet" containerStyle={{
-          backgroundColor: Colors.light_black, 
-          height: getHeight() - 150,
-          padding: 20,
-          }}>
-           <ListAudio/>
-        </ActionSheet>
-        <OptionModal visible={true}/>
-    </View>
+    </PlayerContainer>
   );
 }
 
