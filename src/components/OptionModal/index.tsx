@@ -2,11 +2,11 @@ import React, { useState } from 'react';
 import { useAudio } from '../../hooks/audio';
 import Container from './style';
 
-const OptionModal: React.FC = () => {
+const OptionModal: React.FC = ({ navigation }) => {
   const {optionModalSate, CloseOptionModal} = useAudio();
 
   return (
-    <Container onClose={() => CloseOptionModal()} visible={optionModalSate}></Container>
+    <Container navigation={navigation} onClose={() => CloseOptionModal()} visible={optionModalSate}></Container>
   );
 }
 

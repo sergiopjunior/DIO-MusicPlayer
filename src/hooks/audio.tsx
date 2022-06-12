@@ -125,13 +125,17 @@ const AudioProvider: React.FC = ({children}) => {
         if (currentAudio) {
             //console.log("Loading new Audio", audio);
             try {
-                const status = await currentAudio.getStatusAsync();
+                let status = await currentAudio.getStatusAsync();
                 if (status.isLoaded) {
                     await currentAudio.stopAsync();
                     await currentAudio.unloadAsync();
                 }
                 await currentAudio.loadAsync({uri: audio.uri}, {shouldPlay: status.isPlaying});
+                status = await currentAudio.getStatusAsync();
+                setPlayBackPosition(0);
+                setPlayBackDuration(status.durationMillis);
             } catch (error) {
+                console.log(error);
                 return null;
             }
         }

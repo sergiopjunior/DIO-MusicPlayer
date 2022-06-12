@@ -4,7 +4,7 @@ import { Colors } from '../../assets/js/constants';
 import { normalize } from '../../assets/js/functions';
 import { useAudio } from '../../hooks/audio';
 
-export default function Container({ visible, onClose }) {
+export default function Container({ visible, onClose, navigation }) {
     const {selectedAudio, PlayAudio, currentAudioInfo, isPLay} = useAudio();
 
     return (
@@ -27,7 +27,7 @@ export default function Container({ visible, onClose }) {
                     </TouchableOpacity>
 
                     <View style={style.separator} />
-                    <TouchableOpacity style={style.buttonContainer}>
+                    <TouchableOpacity onPress={() => {navigation.navigate("Playlist"); onClose()}} style={style.buttonContainer}>
                         <Text style={style.button}>Adicionar à Playlist</Text>
                     </TouchableOpacity>
             </View>

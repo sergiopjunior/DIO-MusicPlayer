@@ -8,7 +8,7 @@ import OptionModal from '../OptionModal';
 
 const imageUrl = "../../assets/images/sound.png"
 
-export default function ItemContainer() {
+export default function ItemContainer({ navigation }) {
     const {playList, OpenOptionModal, currentAudioInfo, PlayAudio, isPlay} = useAudio();
     
     const RenderItem = ({ item }) => { 
@@ -40,7 +40,7 @@ export default function ItemContainer() {
                 ItemSeparatorComponent={() => <View style={style.separator}/>}
                 renderItem={item => <RenderItem {...item}/>}
                 ListFooterComponent={
-                  <OptionModal visible={true}/>
+                  <OptionModal visible={true} navigation={navigation}/>
                 }
             />  
         </SafeAreaView>      

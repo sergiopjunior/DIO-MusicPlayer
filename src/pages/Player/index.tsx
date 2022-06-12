@@ -10,7 +10,6 @@ import { Colors } from '../../assets/js/constants';
 import PlayerContainer from './style';
 
 const Player: React.FC = () => {
-  var selectedItem;
 
   return (
     <PlayerContainer>

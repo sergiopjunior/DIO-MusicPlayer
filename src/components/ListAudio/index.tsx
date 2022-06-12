@@ -1,9 +1,9 @@
 import React from 'react';
 import ItemContainer from './style';
 
-const ListAudio: React.FC = () => {
+const ListAudio: React.FC = ({ navigation }) => {
   return (
-    <ItemContainer></ItemContainer>
+    <ItemContainer navigation={navigation}></ItemContainer>
   );
 }
 
