@@ -15,6 +15,9 @@ export class Colors {
 
     // AudioPlayer
     static audio_player = "white";
+    static slider_label = "white";
+    static minimumTrackTintColor = "orange";
+    static maximumTrackTintColor = "white";
 
     // Navigator
     static tabBarColor = "white";

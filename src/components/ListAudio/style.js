@@ -51,6 +51,7 @@ const style = StyleSheet.create({
   listContainer: {
     paddingTop: 20,
     backgroundColor: Colors.light_black,
+
   },
   itemContainer: {
     // View

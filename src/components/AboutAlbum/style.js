@@ -20,17 +20,17 @@ const style = StyleSheet.create({
   container: {
     alignItems: "center",
     justifyContent: "center",
-    paddingTop: 26,
+    paddingTop: 15,
   },
   title: {
     color: "#FFFFFF",
     fontSize: normalize(24),
     fontWeight: "700",
     textAlign: "center",
-    marginBottom: 20,
+    marginBottom: 15,
   },
   album: {
     width: getWidth() - 40,
-    height: 350,
+    height: getWidth() - 100,
   },
 });

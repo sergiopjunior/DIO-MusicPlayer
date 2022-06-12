@@ -6,11 +6,14 @@ const AudioContext = createContext({});
 
 const AudioProvider: React.FC = ({children}) => {
     const [currentAudio, setCurrentAudio] = useState();
+    const [playBackPosition, setPlayBackPosition] = useState();
+    const [playBackDuration, setPlayBackDuration] = useState();
     const [currentAudioInfo, setCurrentAudioInfo] = useState({});
     const [selectedAudio, setSelectedAudio] = useState({});
     const [optionModalSate, setOptionModalState] = useState(false);
     const [playList, setPlayList] = useState([{}]);
     const [isPlay, setIsPlay] = useState(true);
+    const [autoPlay, setAutoPlay] = useState(true);
     const [audiosFound, setAudiosFound] = useState(0);
     
     function CloseOptionModal() {
@@ -25,15 +28,14 @@ const AudioProvider: React.FC = ({children}) => {
     };
 
     async function NextAudio() {
+        let nextAudio = currentAudioInfo.playListId == playList.length - 1 ? playList.slice(0)[0] : playList.slice(currentAudioInfo.playListId + 1)[0];;
+        setCurrentAudioInfo(nextAudio);
+
         if (currentAudio) {
-            if (currentAudioInfo.playListId == playList.length - 1){
-                setCurrentAudioInfo(playList.slice(0)[0]);
-                LoadNewAudio(playList.slice(0)[0]);
-            }
-            else {
-                setCurrentAudioInfo(playList.slice(currentAudioInfo.playListId + 1)[0]);
-                LoadNewAudio(playList.slice(currentAudioInfo.playListId + 1)[0]);
-            }
+            LoadNewAudio(nextAudio);
+        }
+        else {
+            PlayAudio(nextAudio);
         }
     };
 
@@ -59,11 +61,36 @@ const AudioProvider: React.FC = ({children}) => {
             else if (status.isLoaded) {     
                 //console.log("Resume Audio", currentAudioInfo.title);
                 Resume();  
-            } 
+            }       
         }
         else {   
             console.log("Nenhum áudio selecionado");
+        }  
+    }
+
+    const onPlayBackStatusUpdate = (playBackStatus) => {
+        if (playBackStatus.isLoaded && playBackStatus.isPlaying)
+        {
+            setPlayBackPosition(playBackStatus.positionMillis);
+            setPlayBackDuration(playBackStatus.durationMillis);
         }
+        if (playBackStatus.didJustFinish) {
+            if (autoPlay)
+                NextAudio();
+        }
+    }
+
+    async function getPlayBackPosition() {
+        if (currentAudio) {
+            const status = currentAudio.getStatusAsync();
+            if (status.isLoaded)
+            {
+                let pos = (status.positionMillis / status.durationMillis) * 100;
+                console.log(pos, "%");
+                return isNaN(pos) ? 0 : pos;
+            }      
+        }
+        return 0;    
     }
 
     async function Play(source) {
@@ -72,6 +99,8 @@ const AudioProvider: React.FC = ({children}) => {
             const sound = new Audio.Sound();
             await sound.loadAsync({uri: source}, {shouldPlay: true});
             setCurrentAudio(sound);
+
+            sound.setOnPlaybackStatusUpdate(onPlayBackStatusUpdate);
             setIsPlay(true);
         }
         else {
@@ -95,10 +124,16 @@ const AudioProvider: React.FC = ({children}) => {
     async function LoadNewAudio(audio) {
         if (currentAudio) {
             //console.log("Loading new Audio", audio);
-            const status = await currentAudio.getStatusAsync();
-            await currentAudio.stopAsync();
-            await currentAudio.unloadAsync();
-            await currentAudio.loadAsync({uri: audio.uri}, {shouldPlay: status.isPlaying});
+            try {
+                const status = await currentAudio.getStatusAsync();
+                if (status.isLoaded) {
+                    await currentAudio.stopAsync();
+                    await currentAudio.unloadAsync();
+                }
+                await currentAudio.loadAsync({uri: audio.uri}, {shouldPlay: status.isPlaying});
+            } catch (error) {
+                return null;
+            }
         }
     };
 
@@ -116,11 +151,13 @@ const AudioProvider: React.FC = ({children}) => {
     }, []);
 
     return (
-        <AudioContext.Provider value={{currentAudio, 
+        <AudioContext.Provider value={{
             playList, 
             selectedAudio, 
             optionModalSate,
             currentAudioInfo,
+            playBackPosition,
+            playBackDuration,
             audiosFound,
             isPlay,
             CloseOptionModal, 
@@ -128,6 +165,7 @@ const AudioProvider: React.FC = ({children}) => {
             PlayAudio,
             NextAudio,
             PrevAudio,
+            getPlayBackPosition,
             }}
         >{children}</AudioContext.Provider>
     );
