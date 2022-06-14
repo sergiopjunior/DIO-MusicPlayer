@@ -1,7 +1,7 @@
 import React from "react";
 import { View, StyleSheet, SafeAreaView, FlatList, Text, TouchableOpacity } from "react-native";
 import { Colors } from '../../assets/js/constants';
-import { Entypo, AntDesign, Ionicons } from '@expo/vector-icons';
+import { Entypo, AntDesign, Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import PlaylistOptionModal from "../../components/PlaylistOptionModal";
 import { getWidth, normalize } from "../../assets/js/functions";
 import { useAudio } from "../../hooks/audio";
@@ -14,8 +14,9 @@ export default function ItemContainer({ navigation }) {
         return (
               <View style={style.itemContainer}>
                 <TouchableOpacity style={style.leftContainer}>
-                    <View style={style.thumbnail}>            
-                      <AntDesign name={item.id == currentPlayList.id ? "pausecircleo" : "playcircleo"} size={normalize(35)} color={Colors.audio_thumbnail} />
+                    <View style={style.thumbnail}>       
+                        <MaterialCommunityIcons name={item.id == currentPlayList.id ? "playlist-play" : "playlist-music-outline"} 
+                        size={normalize(35)} color={item.id == currentPlayList.id ? Colors.audio_thumbnail_select : Colors.audio_thumbnail} />
                     </View>  
                     <View style={style.itemInfoContainer}>
                         <Text numberOfLines={1} style={style.itemInfoTitle}>{item.name}</Text>
@@ -34,7 +35,7 @@ export default function ItemContainer({ navigation }) {
     return (
         <SafeAreaView style={style.listContainer}>
             <FlatList 
-                data={playLists} 
+                data={playLists.slice(1)} 
                 keyExtractor={item => item.id} 
                 ItemSeparatorComponent={() => <View style={style.separator}/>}
                 renderItem={item => <RenderItem {...item}/>}

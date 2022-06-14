@@ -18,12 +18,13 @@ const AudioProvider: React.FC = ({children}) => {
     const [playlistOptionModalSate, setPlaylistOptionModalSate] = useState(false);
     const [playlistInputModalSate, setPlaylistInputModalSate] = useState(false);
 
+    const [addToPlaylist, setAddToPlaylist] = useState({});
+
     const [isPlay, setIsPlay] = useState(true);
     const [autoPlay, setAutoPlay] = useState(true);
     const [audiosFound, setAudiosFound] = useState(0);
     
     function CloseAudioOptionModal() {
-        setSelectedAudio({});
         setAudioOptionModalState(false);
     };
 
@@ -64,6 +65,11 @@ const AudioProvider: React.FC = ({children}) => {
         if (id) {
             for (let i = 0; i < playLists.length; i++) {
                 if (playLists[i].id == id) {
+                    if (playLists[i].id == currentPlayList.id)
+                    {
+                        LoadNewAudio();
+                        setCurrentPlayList(playLists[0]);
+                    }                    
                     playLists.splice(i, 1);
                     break;
                 }
@@ -83,6 +89,41 @@ const AudioProvider: React.FC = ({children}) => {
                 if (playLists[i].id == id) {
                     playLists[i].name = new_name;
                     break;
+                }
+            }
+        }
+    }
+
+    async function PlayPlaylist(playlist = null) {
+        if (playlist) {
+            setCurrentPlayList(playlist);
+            if (Object.keys(playlist).length > 0)
+                PlayAudio(playlist.audios[0])
+        }
+    }
+
+    async function AddToPlaylist(playlist_id = null, audio = null) {
+        if (playlist_id && audio) {
+            for (let i = 0; i < playLists.length; i++) {
+                if (playLists[i].id == playlist_id) {
+                    audio.playListId = playLists[i].audios.length + 1;
+                    playLists[i].audios.push(audio);
+                    break;
+                }
+            }
+        }
+    }
+
+    async function RemoveFromPlaylist(playlist_id = null, audio = null) {
+        if (playlist_id && audio) {
+            for (let i = 0; i < playLists.length; i++) {
+                if (playLists[i].id == playlist_id) {
+                    for (let j = 0; j < playLists[i].audios.length; j++){
+                        if (playLists[i].audios[j].id = audio.id) {
+                            playLists[i].audios.splice(j, 1);
+                            break;
+                        }
+                    }         
                 }
             }
         }
@@ -167,8 +208,11 @@ const AudioProvider: React.FC = ({children}) => {
             setIsPlay(true);
         }
         else {
-            await currentAudio.stopAsync();
-            await currentAudio.unloadAsync();
+            let status = await currentAudio.getStatusAsync();
+            if (status.isLoaded) {
+                await currentAudio.stopAsync();
+                await currentAudio.unloadAsync();
+            }
             await currentAudio.loadAsync({uri: source}, {shouldPlay: true});
         }
         setIsPlay(true);
@@ -184,7 +228,7 @@ const AudioProvider: React.FC = ({children}) => {
         setIsPlay(false);
     };
 
-    async function LoadNewAudio(audio) {
+    async function LoadNewAudio(audio = null) {
         if (currentAudio) {
             //console.log("Loading new Audio", audio);
             try {
@@ -193,10 +237,18 @@ const AudioProvider: React.FC = ({children}) => {
                     await currentAudio.stopAsync();
                     await currentAudio.unloadAsync();
                 }
-                await currentAudio.loadAsync({uri: audio.uri}, {shouldPlay: status.isPlaying});
-                status = await currentAudio.getStatusAsync();
-                setPlayBackPosition(0);
-                setPlayBackDuration(status.durationMillis);
+                if (audio) {
+                    await currentAudio.loadAsync({uri: audio.uri}, {shouldPlay: status.isPlaying});
+                    status = await currentAudio.getStatusAsync();
+                    setPlayBackPosition(0);
+                    setPlayBackDuration(status.durationMillis);
+                }
+                else {
+                    setPlayBackPosition(0);
+                    setPlayBackDuration(0);
+                    setIsPlay(false);
+                    setCurrentAudioInfo({});
+                }
             } catch (error) {
                 console.log(error);
                 return null;
@@ -237,6 +289,7 @@ const AudioProvider: React.FC = ({children}) => {
             playBackDuration,
             audiosFound,
             isPlay,
+            addToPlaylist,
             CloseAudioOptionModal, 
             OpenAudioOptionModal,
             ClosePlaylistOptionModal,
@@ -250,6 +303,8 @@ const AudioProvider: React.FC = ({children}) => {
             DeletePlaylist,
             CreatePlaylist,
             RenamePlaylist,
+            PlayPlaylist,
+            setAddToPlaylist,
             }}
         >{children}</AudioContext.Provider>
     );

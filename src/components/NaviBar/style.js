@@ -12,7 +12,7 @@ import { useAudio } from "../../hooks/audio";
 const Tab = createBottomTabNavigator();
 
 export default function Container() {
-    const {audiosFound} = useAudio();
+    const {audiosFound, setAddToPlaylist} = useAudio();
 
     return (
         <Tab.Navigator initialRouteName="Player" screenOptions={({ route }) => ({
@@ -36,10 +36,20 @@ export default function Container() {
             tabBarInactiveTintColor: Colors.tabBarLabelColor, 
             tabBarBadgeStyle: {color: Colors.tabBarBadgeTextColor, backgroundColor: Colors.tabBarBadgeColor, fontSize: normalize(15), alignItems: "center", justifyContent: "center" }, 
             headerShown: false,
-          })}>
+          })}
+          screenListeners={{
+            state: (e) => {
+              // Do something with the state
+              if (e.data.state.index != 2) {
+                  setAddToPlaylist({});
+              }
+            },
+          }}>
+
             <Tab.Screen name="Músicas" component={ListAudio} options={{ tabBarBadge: audiosFound }}/>
             <Tab.Screen name="Player" component={Player}/>
             <Tab.Screen name="Playlist" component={Playlist}/>
+
         </Tab.Navigator>
     );
 }

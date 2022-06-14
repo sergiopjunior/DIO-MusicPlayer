@@ -8,12 +8,14 @@ export class Colors {
 
     // Playlist
     static audio_thumbnail = "white";
+    static audio_thumbnail_select = "rgba(255, 255, 0, 1)";
     static audio_title = "white";
     static audio_date = "rgba(255, 255, 255, 0.8)";
     static list_separator = "rgba(255, 255, 255, 0.3)";
     static audio_more_info = "rgba(255, 255, 255, 0.7)";
     static new_list_icon_color = "yellow";
     static new_playlist_check_color = "white";
+    static new_playlist_invalid_check_bg_color = "red";
     static new_playlist_check_bg_color = "blue";
     static new_playlist_input_color = "blue";
 

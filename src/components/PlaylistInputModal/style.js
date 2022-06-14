@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Modal, View, Text, TextInput, StyleSheet, TouchableOpacity, TouchableWithoutFeedback } from "react-native";
 import { Colors } from '../../assets/js/constants';
 import { AntDesign } from '@expo/vector-icons';
@@ -7,21 +7,33 @@ import { useAudio } from '../../hooks/audio';
 
 export default function Container({ visible, onClose, navigation }) {
     const {selectedPlaylist, CreatePlaylist, RenamePlaylist} = useAudio();
+    const [playlistName, setPlaylistName] = useState("");
 
     return (
-        <Modal animationType="fade" transparent visible={visible}>
+        <Modal onShow={() => setPlaylistName(selectedPlaylist.name == undefined ? "" : selectedPlaylist.name)} animationType="fade" transparent visible={visible}>
             <View style={style.container}>
                 <View style={style.inputContainer}>
-                    <TextInput style={style.input} placeholder="Nome da Playlist"></TextInput>
+                    <TextInput value={playlistName} onChangeText={(text) => setPlaylistName(text)} style={style.input} placeholder="Nome da Playlist"></TextInput>
                     <TouchableOpacity 
                         onPress={() => {
-                            Object.keys(selectedPlaylist).length > 0 ? 
-                            RenamePlaylist(selectedPlaylist.id, "Renomear playlist") :
-                            CreatePlaylist("Criar playlist");
+                            if (!playlistName.trim()) {
                             onClose();
+                            }
+                            else {
+                                Object.keys(selectedPlaylist).length > 0 ? 
+                                RenamePlaylist(selectedPlaylist.id, playlistName) :
+                                CreatePlaylist(playlistName);
+                                onClose();
+                            }       
                         }                        
                             }>
-                        <AntDesign name="check" size={normalize(24)} color={Colors.new_playlist_check_color} style={style.submitIcon}></AntDesign>
+                        <AntDesign name="check" size={normalize(24)} color={Colors.new_playlist_check_color} 
+                        style={[
+                            style.submitIcon,
+                            {backgroundColor: playlistName == undefined || playlistName == "" ? 
+                            Colors.new_playlist_invalid_check_bg_color : Colors.new_playlist_check_bg_color
+                            }
+                        ]}></AntDesign>
                     </TouchableOpacity>
                 </View>     
             </View>
@@ -59,7 +71,7 @@ const style = StyleSheet.create({
     },
     submitIcon: {
         padding: 10,
-        backgroundColor: Colors.new_playlist_check_bg_color,
+        //backgroundColor: Colors.new_playlist_check_bg_color,
         borderRadius: 50,
         marginTop: 20,
     },
