@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
+import { View, StyleSheet, Button, Alert } from "react-native";
 import { Audio } from "expo-av";
 import GetAudioFiles from "../services/api";
 
@@ -102,12 +103,35 @@ const AudioProvider: React.FC = ({children}) => {
         }
     }
 
+    function isAudioInPlaylist(playlist, audio_id) {
+        let audios = playlist.audios;
+        for (let i = 0; i < audios.length; i++) {
+            if (audios[i].id == audio_id) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     async function AddToPlaylist(playlist_id = null, audio = null) {
         if (playlist_id && audio) {
             for (let i = 0; i < playLists.length; i++) {
                 if (playLists[i].id == playlist_id) {
                     audio.playListId = playLists[i].audios.length + 1;
-                    playLists[i].audios.push(audio);
+                    if (!isAudioInPlaylist(playLists[i], audio.id))
+                    {
+                        playLists[i].audios.push(audio);
+                        setAddToPlaylist({});
+                    }                
+                    else {
+                        Alert.alert(
+                            "Ops!",
+                            `${audio.title} já está adicinada à ${playLists[i].name}`,
+                            [ // Array Buttons
+                              { text: "OK", onPress: () => null }
+                            ],                     
+                        );
+                    }
                     break;
                 }
             }
@@ -305,6 +329,8 @@ const AudioProvider: React.FC = ({children}) => {
             RenamePlaylist,
             PlayPlaylist,
             setAddToPlaylist,
+            AddToPlaylist,
+            RemoveFromPlaylist,
             }}
         >{children}</AudioContext.Provider>
     );

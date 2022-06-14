@@ -8,26 +8,36 @@ import { useAudio } from "../../hooks/audio";
 import PlaylistInputModal from "../../components/PlaylistInputModal";
 
 export default function ItemContainer({ navigation }) {
-    const {playLists, currentPlayList, OpenPlaylistOptionModal, OpenPlaylistInputModal} = useAudio();
+    const {playLists, addToPlaylist, currentPlayList, OpenPlaylistOptionModal, OpenPlaylistInputModal, AddToPlaylist} = useAudio();
 
     const RenderItem = ({ item }) => { 
         return (
               <View style={style.itemContainer}>
-                <TouchableOpacity style={style.leftContainer}>
-                    <View style={style.thumbnail}>       
-                        <MaterialCommunityIcons name={item.id == currentPlayList.id ? "playlist-play" : "playlist-music-outline"} 
-                        size={normalize(35)} color={item.id == currentPlayList.id ? Colors.audio_thumbnail_select : Colors.audio_thumbnail} />
+                <TouchableOpacity style={style.leftContainer} onPress={() => 
+                    Object.keys(addToPlaylist).length > 0 ? AddToPlaylist(item.id, addToPlaylist) : console.log("View Playlist")
+                }>
+                    <View style={style.thumbnail}>
+                        {
+                            Object.keys(addToPlaylist).length > 0 ?
+                            <Entypo name="add-to-list" size={normalize(35)} color={Colors.audio_thumbnail} /> :
+                            <MaterialCommunityIcons name={item.id == currentPlayList.id ? "playlist-play" : "playlist-music-outline"} 
+                            size={normalize(35)} color={item.id == currentPlayList.id ? Colors.audio_thumbnail_select : Colors.audio_thumbnail} />
+                        }       
                     </View>  
                     <View style={style.itemInfoContainer}>
                         <Text numberOfLines={1} style={style.itemInfoTitle}>{item.name}</Text>
                         <Text style={style.itemInfoAudiosCount}>{item.audios.length}</Text>
                     </View>
                 </TouchableOpacity>   
-                <TouchableOpacity onPress={() => OpenPlaylistOptionModal(item)}>
-                  <View style={style.rightConainer}>
-                    <Entypo name="dots-three-vertical" size={normalize(20)} color={Colors.audio_more_info} />
-                  </View>  
-                </TouchableOpacity>                           
+                {
+                        Object.keys(addToPlaylist).length > 0 ? 
+                        <></> : 
+                        <TouchableOpacity onPress={() => OpenPlaylistOptionModal(item)}>
+                           <View style={style.rightConainer}>
+                                 <Entypo name="dots-three-vertical" size={normalize(20)} color={Colors.audio_more_info} />            
+                           </View>  
+                        </TouchableOpacity>  
+                }                          
               </View>
             )
       };
