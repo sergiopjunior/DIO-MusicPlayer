@@ -10,25 +10,59 @@ const AudioProvider: React.FC = ({children}) => {
     const [playBackDuration, setPlayBackDuration] = useState();
     const [currentAudioInfo, setCurrentAudioInfo] = useState({});
     const [selectedAudio, setSelectedAudio] = useState({});
-    const [optionModalSate, setOptionModalState] = useState(false);
-    const [playList, setPlayList] = useState([{}]);
+    const [audioOptionModalSate, setAudioOptionModalState] = useState(false);
+
+    const [currentPlayList, setCurrentPlayList] = useState({});
+    const [playLists, setPlaylists] = useState([{}]);
+    const [selectedPlaylist, setSelectedPlaylist] = useState({});
+    const [playlistOptionModalSate, setPlaylistOptionModalSate] = useState(false);
+
     const [isPlay, setIsPlay] = useState(true);
     const [autoPlay, setAutoPlay] = useState(true);
     const [audiosFound, setAudiosFound] = useState(0);
     
-    function CloseOptionModal() {
-        setOptionModalState(false);
+    function CloseAudioOptionModal() {
+        setAudioOptionModalState(false);
     };
 
-    function OpenOptionModal(item = {}) {
+    function OpenAudioOptionModal(item = {}) {
         if (item) {
             setSelectedAudio(item);
-            setOptionModalState(true);
+            setAudioOptionModalState(true);
         }
     };
 
+    function ClosePlaylistOptionModal() {
+        setPlaylistOptionModalSate(false);
+    }
+
+    function OpenPlaylistOptionModal(item = {}) {
+        if (item) {
+            setSelectedPlaylist(item);
+            setPlaylistOptionModalSate(true);
+        }
+    };
+
+    async function DeletePlaylist(id = null) {
+        if (id) {
+            for (let i = 0; i < playLists.length; i++) {
+                if (playLists[i].id == id) {
+                    playLists.splice(i, 1);
+                    break;
+                }
+            }
+        }
+    }
+
+    async function CreatePlaylist(name = "") {
+        let new_playlist = {id: playLists.length + 1, name: name, audios: []}
+        playLists.push(new_playlist);
+        setPlaylists(playLists);
+    }
+
     async function NextAudio() {
-        let nextAudio = currentAudioInfo.playListId == playList.length - 1 ? playList.slice(0)[0] : playList.slice(currentAudioInfo.playListId + 1)[0];;
+        let audios = currentPlayList.audios;
+        let nextAudio = currentAudioInfo.playListId == audios.length - 1 ? audios.slice(0)[0] : audios.slice(currentAudioInfo.playListId + 1)[0];;
         setCurrentAudioInfo(nextAudio);
 
         if (currentAudio) {
@@ -40,9 +74,10 @@ const AudioProvider: React.FC = ({children}) => {
     };
 
     async function PrevAudio() {
+        let audios = currentPlayList.audios;
         if (currentAudio) {
-            setCurrentAudioInfo(playList.slice(currentAudioInfo.playListId - 1)[0]);
-            LoadNewAudio(playList.slice(currentAudioInfo.playListId - 1)[0]);
+            setCurrentAudioInfo(audios.slice(currentAudioInfo.playListId - 1)[0]);
+            LoadNewAudio(audios.slice(currentAudioInfo.playListId - 1)[0]);
         }
     };
 
@@ -147,8 +182,14 @@ const AudioProvider: React.FC = ({children}) => {
            
            if (!result || result.length == 0) return;
            
-           setPlayList(result);
+           let audiosFound = {id: 0, name: "Audios", audios: result};
+           let favoritos = {id: 1, name: "Favoritos", audios: result};
+           setCurrentPlayList(audiosFound);
            setAudiosFound(result.length);
+           let temp = [audiosFound];
+
+           temp.push(favoritos);
+           setPlaylists(temp);
         };
 
         loadAudio();
@@ -156,20 +197,27 @@ const AudioProvider: React.FC = ({children}) => {
 
     return (
         <AudioContext.Provider value={{
-            playList, 
-            selectedAudio, 
-            optionModalSate,
+            currentPlayList, 
+            playLists,
+            selectedAudio,
+            selectedPlaylist,
+            audioOptionModalSate,
+            playlistOptionModalSate,
             currentAudioInfo,
             playBackPosition,
             playBackDuration,
             audiosFound,
             isPlay,
-            CloseOptionModal, 
-            OpenOptionModal,
+            CloseAudioOptionModal, 
+            OpenAudioOptionModal,
+            ClosePlaylistOptionModal,
+            OpenPlaylistOptionModal,
             PlayAudio,
             NextAudio,
             PrevAudio,
             getPlayBackPosition,
+            DeletePlaylist,
+            CreatePlaylist,
             }}
         >{children}</AudioContext.Provider>
     );

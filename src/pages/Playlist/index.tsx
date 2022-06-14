@@ -1,9 +1,9 @@
 import React from 'react';
-import Container from './style';
+import ItemContainer from './style';
 
-const Playlist: React.FC = () => {
+const Playlist: React.FC = ({ navigation }) => {
   return (
-    <Container/>
+    <ItemContainer navigation={navigation}></ItemContainer>
   );
 }
 

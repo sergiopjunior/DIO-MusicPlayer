@@ -1,16 +1,16 @@
 import React from 'react';
-import { View, TouchableOpacity, StyleSheet, Text, ScrollView, FlatList, SafeAreaView } from "react-native";
+import { View, TouchableOpacity, StyleSheet, Text, FlatList, SafeAreaView } from "react-native";
 import { getWidth, normalize } from '../../assets/js/functions';
 import { useAudio } from '../../hooks/audio';
 import { Entypo, AntDesign } from '@expo/vector-icons'; 
 import { Colors } from '../../assets/js/constants';
-import OptionModal from '../OptionModal';
+import AudioOptionModal from '../AudioOptionModal';
 
 const imageUrl = "../../assets/images/sound.png"
 
 export default function ItemContainer({ navigation }) {
-    const {playList, OpenOptionModal, currentAudioInfo, PlayAudio, isPlay} = useAudio();
-    
+    const {playLists, OpenAudioOptionModal, currentAudioInfo, PlayAudio, isPlay} = useAudio();
+
     const RenderItem = ({ item }) => { 
       return (
             <View style={style.itemContainer}>
@@ -23,7 +23,7 @@ export default function ItemContainer({ navigation }) {
                         <Text style={style.itemInfoDuration}>{item.duration}</Text>
                   </View>
                 </TouchableOpacity>
-                <TouchableOpacity onPress={() => OpenOptionModal(item)}>
+                <TouchableOpacity onPress={() => OpenAudioOptionModal(item)}>
                   <View style={style.rightConainer}>
                     <Entypo name="dots-three-vertical" size={normalize(20)} color={Colors.audio_more_info} />
                   </View>  
@@ -35,12 +35,12 @@ export default function ItemContainer({ navigation }) {
     return (
         <SafeAreaView style={style.listContainer}>
             <FlatList 
-                data={playList} 
+                data={playLists[0].audios}
                 keyExtractor={item => item.id} 
                 ItemSeparatorComponent={() => <View style={style.separator}/>}
                 renderItem={item => <RenderItem {...item}/>}
                 ListFooterComponent={
-                  <OptionModal visible={true} navigation={navigation}/>
+                  <AudioOptionModal visible={true} navigation={navigation}/>
                 }
             />  
         </SafeAreaView>      
@@ -51,7 +51,7 @@ const style = StyleSheet.create({
   listContainer: {
     paddingTop: 20,
     backgroundColor: Colors.light_black,
-
+    flex: 1,
   },
   itemContainer: {
     // View
@@ -101,9 +101,10 @@ const style = StyleSheet.create({
   },
   separator: {
     // View
-    width: "100%",
+    width: "90%",
     height: 1,
     backgroundColor: Colors.list_separator,
     marginTop: 5,
+    alignSelf: "center",
   },
 });
