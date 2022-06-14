@@ -16,12 +16,14 @@ const AudioProvider: React.FC = ({children}) => {
     const [playLists, setPlaylists] = useState([{}]);
     const [selectedPlaylist, setSelectedPlaylist] = useState({});
     const [playlistOptionModalSate, setPlaylistOptionModalSate] = useState(false);
+    const [playlistInputModalSate, setPlaylistInputModalSate] = useState(false);
 
     const [isPlay, setIsPlay] = useState(true);
     const [autoPlay, setAutoPlay] = useState(true);
     const [audiosFound, setAudiosFound] = useState(0);
     
     function CloseAudioOptionModal() {
+        setSelectedAudio({});
         setAudioOptionModalState(false);
     };
 
@@ -36,13 +38,28 @@ const AudioProvider: React.FC = ({children}) => {
         setPlaylistOptionModalSate(false);
     }
 
-    function OpenPlaylistOptionModal(item = {}) {
+    function OpenPlaylistOptionModal(item = null) {
         if (item) {
             setSelectedPlaylist(item);
             setPlaylistOptionModalSate(true);
         }
     };
 
+    function ClosePlaylistInputModal() {
+        setSelectedPlaylist({});
+        setPlaylistInputModalSate(false);
+    }
+
+    function OpenPlaylistInputModal(item = null) {
+        if (item) {
+            setSelectedPlaylist(item);
+        }
+        else {
+            setSelectedPlaylist({});
+        }
+        setPlaylistInputModalSate(true);
+    }
+    
     async function DeletePlaylist(id = null) {
         if (id) {
             for (let i = 0; i < playLists.length; i++) {
@@ -58,6 +75,17 @@ const AudioProvider: React.FC = ({children}) => {
         let new_playlist = {id: playLists.length + 1, name: name, audios: []}
         playLists.push(new_playlist);
         setPlaylists(playLists);
+    }
+
+    async function RenamePlaylist(id = null, new_name = "") {
+        if (id) {
+            for (let i = 0; i < playLists.length; i++) {
+                if (playLists[i].id == id) {
+                    playLists[i].name = new_name;
+                    break;
+                }
+            }
+        }
     }
 
     async function NextAudio() {
@@ -203,6 +231,7 @@ const AudioProvider: React.FC = ({children}) => {
             selectedPlaylist,
             audioOptionModalSate,
             playlistOptionModalSate,
+            playlistInputModalSate,
             currentAudioInfo,
             playBackPosition,
             playBackDuration,
@@ -212,12 +241,15 @@ const AudioProvider: React.FC = ({children}) => {
             OpenAudioOptionModal,
             ClosePlaylistOptionModal,
             OpenPlaylistOptionModal,
+            ClosePlaylistInputModal,
+            OpenPlaylistInputModal,
             PlayAudio,
             NextAudio,
             PrevAudio,
             getPlayBackPosition,
             DeletePlaylist,
             CreatePlaylist,
+            RenamePlaylist,
             }}
         >{children}</AudioContext.Provider>
     );

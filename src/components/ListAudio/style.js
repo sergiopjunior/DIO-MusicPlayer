@@ -39,10 +39,8 @@ export default function ItemContainer({ navigation }) {
                 keyExtractor={item => item.id} 
                 ItemSeparatorComponent={() => <View style={style.separator}/>}
                 renderItem={item => <RenderItem {...item}/>}
-                ListFooterComponent={
-                  <AudioOptionModal visible={true} navigation={navigation}/>
-                }
             />  
+            <AudioOptionModal visible={true} navigation={navigation}/>
         </SafeAreaView>      
     );
 }

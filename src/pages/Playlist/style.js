@@ -1,13 +1,14 @@
 import React from "react";
 import { View, StyleSheet, SafeAreaView, FlatList, Text, TouchableOpacity } from "react-native";
 import { Colors } from '../../assets/js/constants';
-import { Entypo, AntDesign } from '@expo/vector-icons';
+import { Entypo, AntDesign, Ionicons } from '@expo/vector-icons';
 import PlaylistOptionModal from "../../components/PlaylistOptionModal";
 import { getWidth, normalize } from "../../assets/js/functions";
 import { useAudio } from "../../hooks/audio";
+import PlaylistInputModal from "../../components/PlaylistInputModal";
 
 export default function ItemContainer({ navigation }) {
-    const {playLists, currentPlayList, OpenPlaylistOptionModal} = useAudio();
+    const {playLists, currentPlayList, OpenPlaylistOptionModal, OpenPlaylistInputModal} = useAudio();
 
     const RenderItem = ({ item }) => { 
         return (
@@ -38,18 +39,27 @@ export default function ItemContainer({ navigation }) {
                 ItemSeparatorComponent={() => <View style={style.separator}/>}
                 renderItem={item => <RenderItem {...item}/>}
                 ListFooterComponent={
-                    <PlaylistOptionModal visible={true} navigation={navigation}/>
-                  }
-            />  
+                    <>
+                    <View style={style.separator}/>
+                    <TouchableOpacity style={style.newListButton} onPress={() => OpenPlaylistInputModal()}>
+                        <Ionicons name="add-circle-outline" size={normalize(30)} color={Colors.new_list_icon_color} />
+                        <Text style={style.newListText}>Criar nova Playlist</Text>
+                    </TouchableOpacity>
+                    </>
+                }
+            />       
+            <PlaylistOptionModal visible={true} navigation={navigation}/>
+            <PlaylistInputModal visible={true} navigation={navigation}/>
         </SafeAreaView> 
     );
 };
 
 const style = StyleSheet.create({
     listContainer: {
-        paddingTop: 20,
-        backgroundColor: Colors.light_black,
         flex: 1,
+        alignItems: "center",
+        paddingTop: 20,
+        backgroundColor: Colors.light_black,  
     },
     itemContainer: {
         // View
@@ -99,10 +109,21 @@ const style = StyleSheet.create({
     },
     separator: {
         // View
-        width: "90%",
+        width: "100%",
         height: 1,
         backgroundColor: Colors.list_separator,
         marginTop: 5,
-        alignSelf: "center",
     },
+    newListButton: {
+        flexDirection: "row",
+        alignItems: "center",
+        width: getWidth() - 40,
+        marginTop: 10,
+        paddingLeft: 15,
+    },
+    newListText: {
+        marginLeft: 5,
+        fontSize: normalize(20),
+        color: Colors.audio_title,
+    }
 });
