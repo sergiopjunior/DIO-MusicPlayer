@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { getWidth, normalize } from '../../assets/js/functions';
-import { AntDesign } from '@expo/vector-icons';
+import { AntDesign, Entypo, FontAwesome } from '@expo/vector-icons';
 import { Colors } from '../../assets/js/constants';
 import { useAudio } from '../../hooks/audio';
 import Slider from '@react-native-community/slider';
@@ -10,7 +10,7 @@ const imageUrl = "../../assets/images/temp.png"
 
 export default function Container() {
     const {isPlay, PlayAudio, NextAudio, PrevAudio, currentAudioInfo, playBackPosition,
-      playBackDuration} = useAudio();
+      playBackDuration, playLoop, randomSequence, togglePlayLoop, toggleRandomSequence} = useAudio();
 
     const calculateSeekBar = () => {
       if (Object.keys(currentAudioInfo).length > 0) {
@@ -40,6 +40,11 @@ export default function Container() {
         </View>
         
         <View style={style.buttonContainer}>
+          <TouchableOpacity onPress={() => togglePlayLoop()} style={style.buttonAction}>
+            <Entypo name="loop" size={normalize(17)} color={!playLoop ? Colors.audio_player : Colors.audio_play_active} />
+          </TouchableOpacity>
+
+          <View style={style.middleButtonContainer}>
             <TouchableOpacity onPress={() => PrevAudio()} style={style.buttonAction}>
               <AntDesign name="banckward" size={normalize(23)} color={Colors.audio_player}/>
             </TouchableOpacity>
@@ -49,6 +54,11 @@ export default function Container() {
             <TouchableOpacity onPress={() => NextAudio()} style={style.buttonAction}>
               <AntDesign name="forward" size={normalize(23)} color={Colors.audio_player}/>
             </TouchableOpacity>
+          </View>
+
+          <TouchableOpacity onPress={() => toggleRandomSequence()} style={style.buttonAction}>
+            <FontAwesome name="random" size={normalize(17)} color={!randomSequence ? Colors.audio_player : Colors.audio_play_active} />
+          </TouchableOpacity>
         </View>
       </View>
     );
@@ -81,10 +91,17 @@ const style = StyleSheet.create({
   },
   buttonContainer: {
       flexDirection: "row",
-      width: getWidth() - normalize(100),
+      width: getWidth() - normalize(70),
       justifyContent: "space-between",
       alignItems: "center",
       marginTop: 10,
+  },
+  middleButtonContainer: {
+    flexDirection: "row",
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "space-between",
+    paddingHorizontal: 20,
   },
   buttonActionPrimay: {
     width: normalize(55),

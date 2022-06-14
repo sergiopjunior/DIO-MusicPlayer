@@ -6,6 +6,7 @@ import GetAudioFiles from "../services/api";
 const AudioContext = createContext({});
 
 const AudioProvider: React.FC = ({children}) => {
+    
     const [currentAudio, setCurrentAudio] = useState();
     const [playBackPosition, setPlayBackPosition] = useState();
     const [playBackDuration, setPlayBackDuration] = useState();
@@ -21,10 +22,26 @@ const AudioProvider: React.FC = ({children}) => {
 
     const [addToPlaylist, setAddToPlaylist] = useState({});
 
-    const [isPlay, setIsPlay] = useState(true);
+    const [isPlay, setIsPlay] = useState(false);
     const [autoPlay, setAutoPlay] = useState(true);
+    const [playLoop, setPlayLoop] = useState(false);
+    const [randomSequence, setRandomSequence] = useState(false);
     const [audiosFound, setAudiosFound] = useState(0);
     
+    function toggleAutoPlay() {
+        setAutoPlay(!autoPlay);
+    };
+
+    function togglePlayLoop() {
+        if (currentAudio)
+            currentAudio.setStatusAsync({ isLooping: !playLoop })
+        setPlayLoop(!playLoop);
+    };
+
+    function toggleRandomSequence() {
+        setRandomSequence(!randomSequence);
+    };
+
     function CloseAudioOptionModal() {
         setAudioOptionModalState(false);
     };
@@ -174,6 +191,22 @@ const AudioProvider: React.FC = ({children}) => {
         }
     };
 
+    async function RandomAudio() {
+        let audios = currentPlayList.audios;
+        if (currentAudio) {
+            let index = Math.floor(Math.random() * audios.length);
+            if (currentAudioInfo.playListId != index) {
+                setCurrentAudioInfo(audios.slice(index)[0]);
+                LoadNewAudio(audios.slice(index)[0]);
+            }
+            else {
+                index += index == audios.length - 1 && index != 0 ? -1 : index != 0 ? 1 : 0;
+                setCurrentAudioInfo(audios.slice(index)[0]);
+                LoadNewAudio(audios.slice(index)[0]);
+            }
+        }
+    }
+
     async function PlayAudio(audio = {}) {
         if (Object.keys(audio).length > 0) {
             //console.log("Playing new Audio", audio.title);
@@ -196,39 +229,33 @@ const AudioProvider: React.FC = ({children}) => {
         }  
     }
 
-    const onPlayBackStatusUpdate = (playBackStatus) => {
+    const onPlayBackStatusUpdate = async (playBackStatus) => {
         if (playBackStatus.isLoaded && playBackStatus.isPlaying)
         {
             setPlayBackPosition(playBackStatus.positionMillis);
             setPlayBackDuration(playBackStatus.durationMillis);
         }
-        if (playBackStatus.didJustFinish) {
-            if (autoPlay)
-                NextAudio();
-        }
-    }
-
-    async function getPlayBackPosition() {
-        if (currentAudio) {
-            const status = currentAudio.getStatusAsync();
-            if (status.isLoaded)
+        if (playBackStatus.didJustFinish && !playBackStatus.isLooping) {
+            setIsPlay(false);
+            if (randomSequence)
             {
-                let pos = (status.positionMillis / status.durationMillis) * 100;
-                console.log(pos, "%");
-                return isNaN(pos) ? 0 : pos;
-            }      
+                RandomAudio();
+                console.log("Random");
+            }
+            else
+                NextAudio();         
         }
-        return 0;    
     }
 
     async function Play(source) {
         if (!currentAudio)
         {
             const sound = new Audio.Sound();
-            await sound.loadAsync({uri: source}, {shouldPlay: true});
+            await sound.loadAsync({uri: source}, {shouldPlay: autoPlay, isLooping: playLoop});
             setCurrentAudio(sound);
 
-            sound.setOnPlaybackStatusUpdate(onPlayBackStatusUpdate);
+            //sound.setProgressUpdateIntervalAsync(2000);
+            //sound.setOnPlaybackStatusUpdate(onPlayBackStatusUpdate);
             setIsPlay(true);
         }
         else {
@@ -237,7 +264,7 @@ const AudioProvider: React.FC = ({children}) => {
                 await currentAudio.stopAsync();
                 await currentAudio.unloadAsync();
             }
-            await currentAudio.loadAsync({uri: source}, {shouldPlay: true});
+            await currentAudio.loadAsync({uri: source}, {shouldPlay: autoPlay, isLooping: playLoop});
         }
         setIsPlay(true);
     };
@@ -262,8 +289,9 @@ const AudioProvider: React.FC = ({children}) => {
                     await currentAudio.unloadAsync();
                 }
                 if (audio) {
-                    await currentAudio.loadAsync({uri: audio.uri}, {shouldPlay: status.isPlaying});
+                    await currentAudio.loadAsync({uri: audio.uri}, {shouldPlay: autoPlay, isLooping: playLoop });
                     status = await currentAudio.getStatusAsync();
+                    setIsPlay(true);
                     setPlayBackPosition(0);
                     setPlayBackDuration(status.durationMillis);
                 }
@@ -313,6 +341,9 @@ const AudioProvider: React.FC = ({children}) => {
             playBackDuration,
             audiosFound,
             isPlay,
+            autoPlay,
+            playLoop,
+            randomSequence,
             addToPlaylist,
             CloseAudioOptionModal, 
             OpenAudioOptionModal,
@@ -323,7 +354,6 @@ const AudioProvider: React.FC = ({children}) => {
             PlayAudio,
             NextAudio,
             PrevAudio,
-            getPlayBackPosition,
             DeletePlaylist,
             CreatePlaylist,
             RenamePlaylist,
@@ -331,6 +361,10 @@ const AudioProvider: React.FC = ({children}) => {
             setAddToPlaylist,
             AddToPlaylist,
             RemoveFromPlaylist,
+            toggleAutoPlay,
+            togglePlayLoop,
+            toggleRandomSequence,
+            setPlayLoop,
             }}
         >{children}</AudioContext.Provider>
     );

@@ -26,7 +26,11 @@ export default function ItemContainer({ navigation }) {
                     </View>  
                     <View style={style.itemInfoContainer}>
                         <Text numberOfLines={1} style={style.itemInfoTitle}>{item.name}</Text>
-                        <Text style={style.itemInfoAudiosCount}>{item.audios.length}</Text>
+                        <Text style={style.itemInfoAudiosCount}>
+                            {item.audios.length > 0 ?
+                            item.audios.length > 1 ? `${item.audios.length} Áudios` : `${item.audios.length} Áudio` :
+                            "Nenhum áudio adicionado"
+                        }</Text>
                     </View>
                 </TouchableOpacity>   
                 {

@@ -21,6 +21,7 @@ export class Colors {
 
     // AudioPlayer
     static audio_player = "white";
+    static audio_play_active = "yellow";
     static slider_label = "white";
     static minimumTrackTintColor = "orange";
     static maximumTrackTintColor = "white";

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { View, TouchableOpacity, StyleSheet, Text, FlatList, SafeAreaView } from "react-native";
 import { getWidth, normalize } from '../../assets/js/functions';
 import { useAudio } from '../../hooks/audio';
@@ -10,7 +10,7 @@ const imageUrl = "../../assets/images/sound.png"
 
 export default function ItemContainer({ navigation }) {
     const {playLists, OpenAudioOptionModal, currentAudioInfo, PlayAudio, isPlay} = useAudio();
-
+    console.log("Test");
     const RenderItem = ({ item }) => { 
       return (
             <View style={style.itemContainer}>
