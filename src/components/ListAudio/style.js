@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { View, TouchableOpacity, StyleSheet, Text, FlatList, SafeAreaView } from "react-native";
 import { getWidth, normalize } from '../../assets/js/functions';
 import { useAudio } from '../../hooks/audio';
@@ -8,9 +8,9 @@ import AudioOptionModal from '../AudioOptionModal';
 
 const imageUrl = "../../assets/images/sound.png"
 
-export default function ItemContainer({ navigation }) {
+function ItemContainer({ navigation }) {
     const {playLists, OpenAudioOptionModal, currentAudioInfo, PlayAudio, isPlay} = useAudio();
-    console.log("Test");
+
     const RenderItem = ({ item }) => { 
       return (
             <View style={style.itemContainer}>
@@ -44,6 +44,18 @@ export default function ItemContainer({ navigation }) {
         </SafeAreaView>      
     );
 }
+
+const areEqual = (prevProps, nextProps) => {
+  const { isSelected } = nextProps;
+  const { isSelected: prevIsSelected } = prevProps;
+  
+  /*if the props are equal, it won't update*/
+  const isSelectedEqual = isSelected === prevIsSelected;
+
+  return isSelectedEqual;
+};
+
+export default React.memo(ItemContainer, areEqual);
 
 const style = StyleSheet.create({
   listContainer: {

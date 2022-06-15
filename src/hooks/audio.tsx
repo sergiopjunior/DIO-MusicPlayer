@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
-import { View, StyleSheet, Button, Alert } from "react-native";
+import { Alert } from "react-native";
 import { Audio } from "expo-av";
 import GetAudioFiles from "../services/api";
 
@@ -99,6 +99,7 @@ const AudioProvider: React.FC = ({children}) => {
         let new_playlist = {id: playLists.length + 1, name: name, audios: []}
         playLists.push(new_playlist);
         setPlaylists(playLists);
+        console.log(playLists);
     }
 
     async function RenamePlaylist(id = null, new_name = "") {
@@ -134,7 +135,7 @@ const AudioProvider: React.FC = ({children}) => {
         if (playlist_id && audio) {
             for (let i = 0; i < playLists.length; i++) {
                 if (playLists[i].id == playlist_id) {
-                    audio.playListId = playLists[i].audios.length + 1;
+                    audio.playListId = playLists[i].audios.length;
                     if (!isAudioInPlaylist(playLists[i], audio.id))
                     {
                         playLists[i].audios.push(audio);
@@ -172,7 +173,7 @@ const AudioProvider: React.FC = ({children}) => {
 
     async function NextAudio() {
         let audios = currentPlayList.audios;
-        let nextAudio = currentAudioInfo.playListId == audios.length - 1 ? audios.slice(0)[0] : audios.slice(currentAudioInfo.playListId + 1)[0];;
+        let nextAudio = currentAudioInfo.playListId == audios.length - 1 ? audios.slice(0)[0] : audios.slice(currentAudioInfo.playListId + 1)[0];
         setCurrentAudioInfo(nextAudio);
 
         if (currentAudio) {
@@ -185,9 +186,16 @@ const AudioProvider: React.FC = ({children}) => {
 
     async function PrevAudio() {
         let audios = currentPlayList.audios;
-        if (currentAudio) {
-            setCurrentAudioInfo(audios.slice(currentAudioInfo.playListId - 1)[0]);
-            LoadNewAudio(audios.slice(currentAudioInfo.playListId - 1)[0]);
+        if (currentAudio && Object.keys(currentAudioInfo).length > 0) {
+            if (audios.length == 1) return;
+            else if (currentAudioInfo.playListId == 0) {
+                setCurrentAudioInfo(audios.slice(audios.length - 1)[0]);
+                LoadNewAudio(audios.slice(audios.length - 1)[0]);
+            }
+            else {
+                setCurrentAudioInfo(audios.slice(currentAudioInfo.playListId - 1)[0]);
+                LoadNewAudio(audios.slice(currentAudioInfo.playListId - 1)[0]);
+            }
         }
     };
 
@@ -208,6 +216,7 @@ const AudioProvider: React.FC = ({children}) => {
     }
 
     async function PlayAudio(audio = {}) {
+        console.log(currentPlayList.audios.length);
         if (Object.keys(audio).length > 0) {
             //console.log("Playing new Audio", audio.title);
             setCurrentAudioInfo(audio);     
@@ -255,7 +264,11 @@ const AudioProvider: React.FC = ({children}) => {
             setCurrentAudio(sound);
 
             //sound.setProgressUpdateIntervalAsync(2000);
-            //sound.setOnPlaybackStatusUpdate(onPlayBackStatusUpdate);
+            sound.setOnPlaybackStatusUpdate(onPlayBackStatusUpdate);
+
+            let status = await sound.getStatusAsync();
+            setPlayBackPosition(0);
+            setPlayBackDuration(status.durationMillis);
             setIsPlay(true);
         }
         else {
@@ -265,6 +278,8 @@ const AudioProvider: React.FC = ({children}) => {
                 await currentAudio.unloadAsync();
             }
             await currentAudio.loadAsync({uri: source}, {shouldPlay: autoPlay, isLooping: playLoop});
+            setPlayBackPosition(0);
+            setPlayBackDuration(status.durationMillis);
         }
         setIsPlay(true);
     };
