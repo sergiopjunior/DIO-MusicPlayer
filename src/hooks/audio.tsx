@@ -40,11 +40,11 @@ const AudioProvider: React.FC = ({children}) => {
                     setIsPlay(false);
                     if (randomSequence){
                         RandomAudio();
-                        console.log("Playing random audio");
+                        //console.log("Playing random audio");
                     }
                     else{
                         NextAudio();   
-                        console.log("Playing next audio") ;     
+                        //console.log("Playing next audio") ;     
                     }
                 } 
             }
