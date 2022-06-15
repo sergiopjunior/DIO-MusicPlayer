@@ -10,7 +10,7 @@ const imageUrl = "../../assets/images/temp.png"
 
 export default function Container() {
     const {isPlay, PlayAudio, NextAudio, PrevAudio, currentAudioInfo, playBackPosition,
-      playBackDuration, playLoop, randomSequence, togglePlayLoop, toggleRandomSequence} = useAudio();
+      playBackDuration, playLoop, randomSequence, togglePlayLoop, toggleRandomSequence, setPlayPosition} = useAudio();
 
     const calculateSeekBar = () => {
       if (Object.keys(currentAudioInfo).length > 0) {
@@ -35,7 +35,7 @@ export default function Container() {
             maximumTrackTintColor={Colors.maximumTrackTintColor}
             step={0.5}
             value={playBackPosition}
-            onValueChange={(sliderValue) => null}
+            onValueChange={value => setPlayPosition(value)}
           />
         </View>
         

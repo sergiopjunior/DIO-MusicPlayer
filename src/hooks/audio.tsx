@@ -2,6 +2,7 @@ import React, { createContext, useContext, useEffect, useState } from "react";
 import { Alert } from "react-native";
 import { Audio } from "expo-av";
 import GetAudioFiles from "../services/api";
+import { secondsToMillis } from "../assets/js/functions";
 
 const AudioContext = createContext({});
 
@@ -27,34 +28,6 @@ const AudioProvider: React.FC = ({children}) => {
     const [playLoop, setPlayLoop] = useState(false);
     const [randomSequence, setRandomSequence] = useState(false);
     const [audiosFound, setAudiosFound] = useState(0);
-    
-    const [mins, setMins] = useState(0);
-    const [secs, setSecs] = useState(0);
-
-    useEffect(() => {
-      const timerId = setInterval(() => {
-        if (isPlay && currentAudioInfo) {
-            if (playBackPosition == playBackDuration) {
-                setPlayBackPosition(0);
-                if (!playLoop) {
-                    setIsPlay(false);
-                    if (randomSequence){
-                        RandomAudio();
-                        //console.log("Playing random audio");
-                    }
-                    else{
-                        NextAudio();   
-                        //console.log("Playing next audio") ;     
-                    }
-                } 
-            }
-            else {
-                setPlayBackPosition(playBackPosition + 1);
-            }
-        }    
-      }, 1000)
-      return () => clearInterval(timerId);
-    }, [playBackPosition, playBackDuration, isPlay])
 
     function toggleAutoPlay() {
         setAutoPlay(!autoPlay);
@@ -283,6 +256,32 @@ const AudioProvider: React.FC = ({children}) => {
         }
     }
 
+    // Using this for onUpdateStatus
+    useEffect(() => {
+        const timerId = setInterval(() => {
+          if (isPlay && currentAudioInfo) {
+              if (playBackPosition == playBackDuration) {
+                  setPlayBackPosition(0);
+                  if (!playLoop) {
+                      setIsPlay(false);
+                      if (randomSequence){
+                          RandomAudio();
+                          //console.log("Playing random audio");
+                      }
+                      else{
+                          NextAudio();   
+                          //console.log("Playing next audio") ;     
+                      }
+                  } 
+              }
+              else {
+                  setPlayBackPosition(playBackPosition + 1);
+              }
+          }    
+        }, 1000)
+        return () => clearInterval(timerId);
+      }, [playBackPosition, playBackDuration, isPlay])
+
     function setPlayBackTime(duration = "") {
         if (duration.trim() !== "") {
             const time = duration.split(".");
@@ -292,7 +291,16 @@ const AudioProvider: React.FC = ({children}) => {
             setPlayBackPosition(0);
             setPlayBackDuration(mins * 60 + secs);
         }
-        
+    }
+
+    async function setPlayPosition(position = null) {
+        if (position && currentAudio) {
+            const status = await currentAudio.getStatusAsync();
+            if (status.isLoaded) {
+                setPlayBackPosition(Math.ceil(position));
+                currentAudio.setPositionAsync(secondsToMillis(position));
+            }          
+        }
     }
 
     async function Play(audio) {
@@ -309,7 +317,7 @@ const AudioProvider: React.FC = ({children}) => {
             setIsPlay(true);
         }
         else {
-            let status = await currentAudio.getStatusAsync();
+            const status = await currentAudio.getStatusAsync();
             if (status.isLoaded) {
                 await currentAudio.stopAsync();
                 await currentAudio.unloadAsync();
@@ -413,6 +421,7 @@ const AudioProvider: React.FC = ({children}) => {
             togglePlayLoop,
             toggleRandomSequence,
             setPlayLoop,
+            setPlayPosition,
             }}
         >{children}</AudioContext.Provider>
     );

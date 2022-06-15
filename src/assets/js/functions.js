@@ -38,3 +38,7 @@ export function secondsToMinutesAndSeconds(seconds) {
 
   return `${minutes}.${seconds}`;
 }
+
+export function secondsToMillis(seconds) {
+  return seconds * 1000;
+}
