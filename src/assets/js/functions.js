@@ -24,3 +24,17 @@ export function getWidth() {
 export function getHeight() {
   return Dimensions.get("screen").height;
 }
+
+export function millisToMinutesAndSeconds(millis) {
+  var minutes = Math.floor(millis / 60000);
+  var seconds = ((millis % 60000) / 1000).toFixed(0);
+
+  return `${minutes}:${seconds}`;
+}
+
+export function secondsToMinutesAndSeconds(seconds) {
+  var minutes = Math.floor(seconds / 60);
+  var seconds = seconds - minutes * 60;
+
+  return `${minutes}.${seconds}`;
+}

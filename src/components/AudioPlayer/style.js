@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
-import { getWidth, normalize } from '../../assets/js/functions';
+import { getWidth, secondsToMinutesAndSeconds, normalize } from '../../assets/js/functions';
 import { AntDesign, Entypo, FontAwesome } from '@expo/vector-icons';
 import { Colors } from '../../assets/js/constants';
 import { useAudio } from '../../hooks/audio';
@@ -24,17 +24,17 @@ export default function Container() {
       <View style={style.container}>
         <View style={style.sliderContainer}>
           <View style={style.sliderLabelContainer}>
-            <Text style={style.sliderLabel}>0</Text>
-            <Text style={style.sliderLabel}>5.0</Text>
+            <Text style={style.sliderLabel}>{secondsToMinutesAndSeconds(playBackPosition)}</Text>
+            <Text style={style.sliderLabel}>{secondsToMinutesAndSeconds(playBackDuration)}</Text>
           </View>
           <Slider
             style={style.slider}
-            maximumValue={100}
+            maximumValue={playBackDuration}
             minimumValue={0}
             minimumTrackTintColor={Colors.minimumTrackTintColor}
             maximumTrackTintColor={Colors.maximumTrackTintColor}
             step={0.5}
-            value={calculateSeekBar()}
+            value={playBackPosition}
             onValueChange={(sliderValue) => null}
           />
         </View>

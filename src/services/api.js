@@ -1,5 +1,6 @@
 import { Alert } from 'react-native';
 import * as MediaLibrary from 'expo-media-library';
+import { secondsToMinutesAndSeconds } from '../assets/js/functions';
 
 function permissionAlert() {
     Alert("Permissão requerida", "Esse app precisa de permissão para ler arquivos de áudio!", [
@@ -47,7 +48,7 @@ async function generateData(files) {
             id: files.assets[i]["id"],
             title: temp.name,
             date: datestring,
-            duration: parseFloat(files.assets[i]["duration"] / 60).toFixed(2),
+            duration: secondsToMinutesAndSeconds(Math.floor(files.assets[i]["duration"])),
             format: temp.format,
             uri: files.assets[i]["uri"],
         })
