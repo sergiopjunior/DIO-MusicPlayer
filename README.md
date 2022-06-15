@@ -14,9 +14,9 @@ Projeto feito para o desafio de projeto " Criando um Player de música com React
 
 ### Demo 1:
 
-https://user-images.githubusercontent.com/76756912/173932982-a6402732-a1e6-48b0-9f7c-34dd229f8402.mp4
+https://user-images.githubusercontent.com/76756912/173933913-14e26925-2785-4eb2-b900-587e240797c0.mp4
 
-### Demo 2:
 
-https://user-images.githubusercontent.com/76756912/173933113-1c7c816a-1fbd-4d20-919d-881efd54c9d8.mp4
+
+
 
