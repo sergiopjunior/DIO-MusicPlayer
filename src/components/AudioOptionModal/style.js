@@ -5,7 +5,7 @@ import { normalize } from '../../assets/js/functions';
 import { useAudio } from '../../hooks/audio';
 
 export default function Container({ visible, onClose, navigation }) {
-    const {selectedAudio, PlayAudio, currentAudioInfo, setAddToPlaylist, isPLay} = useAudio();
+    const {selectedAudio, selectedPlaylist, PlayAudio, currentAudioInfo, setAddToPlaylist, RemoveFromPlaylist, isPLay} = useAudio();
 
     return (
         <Modal animationType="slide" transparent visible={visible}>
@@ -27,8 +27,18 @@ export default function Container({ visible, onClose, navigation }) {
                     </TouchableOpacity>
 
                     <View style={style.separator} />
-                    <TouchableOpacity onPress={() => {setAddToPlaylist(selectedAudio); navigation.navigate("Playlist"); onClose()}} style={style.buttonContainer}>
-                        <Text style={style.button}>Adicionar à Playlist</Text>
+                    <TouchableOpacity onPress={() => {
+                        if (Object.keys(selectedPlaylist).length == 0) {
+                            setAddToPlaylist(selectedAudio); 
+                            navigation.navigate("Playlist"); 
+                            onClose()
+                        } 
+                        else {
+                            RemoveFromPlaylist(selectedPlaylist.id, selectedAudio);
+                            onClose();
+                        }
+                        }} style={style.buttonContainer}>
+                        <Text style={style.button}>{Object.keys(selectedPlaylist).length > 0 ? "Remover da Playlist" : "Adicionar à Playlist"}</Text>
                     </TouchableOpacity>
             </View>
             <TouchableWithoutFeedback onPress={onClose}>

@@ -20,7 +20,9 @@ const AudioProvider: React.FC = ({children}) => {
     const [selectedPlaylist, setSelectedPlaylist] = useState({});
     const [playlistOptionModalSate, setPlaylistOptionModalSate] = useState(false);
     const [playlistInputModalSate, setPlaylistInputModalSate] = useState(false);
+    const [playlistViewModalState, setPlaylistViewModalState] = useState(false);
 
+    const [playListView, setPlayListView] = useState({});
     const [addToPlaylist, setAddToPlaylist] = useState({});
 
     const [isPlay, setIsPlay] = useState(false);
@@ -79,6 +81,18 @@ const AudioProvider: React.FC = ({children}) => {
         }
         setPlaylistInputModalSate(true);
     }
+
+    function ClosePlaylistViewModal() {
+        setSelectedPlaylist({});
+        setPlaylistViewModalState(false);
+    }
+
+    function OpenPlaylistViewModal(item = null) {
+        if (item) {
+            setSelectedPlaylist(item);
+            setPlaylistViewModalState(true);
+        }
+    }
     
     async function DeletePlaylist(id = null) {
         if (id) {
@@ -100,7 +114,7 @@ const AudioProvider: React.FC = ({children}) => {
         let new_playlist = {id: playLists.length + 1, name: name, audios: []}
         playLists.push(new_playlist);
         setPlaylists(playLists);
-        console.log(playLists);
+        //console.log(playLists);
     }
 
     async function RenamePlaylist(id = null, new_name = "") {
@@ -371,7 +385,7 @@ const AudioProvider: React.FC = ({children}) => {
            if (!result || result.length == 0) return;
            
            let audiosFound = {id: 0, name: "Audios", audios: result};
-           let favoritos = {id: 1, name: "Favoritos", audios: result};
+           let favoritos = {id: 1, name: "Favoritos", audios: []};
            setCurrentPlayList(audiosFound);
            setAudiosFound(result.length);
            let temp = [audiosFound];
@@ -392,6 +406,7 @@ const AudioProvider: React.FC = ({children}) => {
             audioOptionModalSate,
             playlistOptionModalSate,
             playlistInputModalSate,
+            playlistViewModalState,
             currentAudioInfo,
             playBackPosition,
             playBackDuration,
@@ -407,6 +422,8 @@ const AudioProvider: React.FC = ({children}) => {
             OpenPlaylistOptionModal,
             ClosePlaylistInputModal,
             OpenPlaylistInputModal,
+            ClosePlaylistViewModal,
+            OpenPlaylistViewModal,
             PlayAudio,
             NextAudio,
             PrevAudio,

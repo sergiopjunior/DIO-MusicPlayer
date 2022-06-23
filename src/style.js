@@ -1,7 +1,6 @@
 import React from 'react';
 import { SafeAreaView, Text, StyleSheet } from "react-native";
 import { Colors } from './assets/js/constants';
-import Player from './pages/Player';
 import AppNavigator from './components/NaviBar';
 import { NavigationContainer } from "@react-navigation/native"
 
@@ -10,7 +9,7 @@ export default function App() {
       <SafeAreaView style={style.background}>
           <NavigationContainer>
             <AppNavigator/>
-          </NavigationContainer> 
+          </NavigationContainer>
       </SafeAreaView>
     );
   }

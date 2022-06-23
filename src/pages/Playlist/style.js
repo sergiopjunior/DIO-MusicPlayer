@@ -2,19 +2,29 @@ import React from "react";
 import { View, StyleSheet, SafeAreaView, FlatList, Text, TouchableOpacity } from "react-native";
 import { Colors } from '../../assets/js/constants';
 import { Entypo, AntDesign, Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
-import PlaylistOptionModal from "../../components/PlaylistOptionModal";
 import { getWidth, normalize } from "../../assets/js/functions";
 import { useAudio } from "../../hooks/audio";
+import AudioOptionModal from "../../components/AudioOptionModal";
+import PlaylistOptionModal from "../../components/PlaylistOptionModal";
 import PlaylistInputModal from "../../components/PlaylistInputModal";
+import PlaylistViewModal from "../../components/PlaylistViewModal";
 
 export default function ItemContainer({ navigation }) {
-    const {playLists, addToPlaylist, currentPlayList, OpenPlaylistOptionModal, OpenPlaylistInputModal, AddToPlaylist} = useAudio();
+    const {playLists, addToPlaylist, currentPlayList, OpenPlaylistOptionModal, OpenPlaylistInputModal, AddToPlaylist, OpenPlaylistViewModal} = useAudio();
 
     const RenderItem = ({ item }) => { 
         return (
               <View style={style.itemContainer}>
                 <TouchableOpacity style={style.leftContainer} onPress={() => 
-                    Object.keys(addToPlaylist).length > 0 ? AddToPlaylist(item.id, addToPlaylist) : console.log("View Playlist")
+                {
+                    if (Object.keys(addToPlaylist).length > 0)
+                    {
+                        AddToPlaylist(item.id, addToPlaylist);
+                    }
+                    else {
+                        OpenPlaylistViewModal(item);              
+                    }  
+                }                             
                 }>
                     <View style={style.thumbnail}>
                         {
@@ -63,8 +73,10 @@ export default function ItemContainer({ navigation }) {
                     </>
                 }
             />       
-            <PlaylistOptionModal visible={true} navigation={navigation}/>
-            <PlaylistInputModal visible={true} navigation={navigation}/>
+            <PlaylistOptionModal visible={false} navigation={navigation}/>
+            <PlaylistInputModal visible={false} navigation={navigation}/>
+            <PlaylistViewModal visible={false} navigation={navigation}/>
+            <AudioOptionModal visible={false} navigation={navigation}/>
         </SafeAreaView> 
     );
 };

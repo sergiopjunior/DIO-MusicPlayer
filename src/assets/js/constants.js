@@ -18,6 +18,7 @@ export class Colors {
     static new_playlist_invalid_check_bg_color = "red";
     static new_playlist_check_bg_color = "blue";
     static new_playlist_input_color = "blue";
+    static row_back_color = "white";
 
     // AudioPlayer
     static audio_player = "white";

@@ -1,13 +1,13 @@
 import React from "react";
-import { View, StyleSheet, TouchableOpacity } from "react-native";
+import { StyleSheet } from "react-native";
 import { MaterialIcons, FontAwesome5 } from '@expo/vector-icons';
-import { getHeight, getWidth, normalize } from '../../assets/js/functions';
+import { getWidth, normalize } from '../../assets/js/functions';
 import { Colors } from "../../assets/js/constants";
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Player from "../../pages/Player";
-import ListAudio from "../ListAudio";
 import Playlist from "../../pages/Playlist";
 import { useAudio } from "../../hooks/audio";
+import Audios from "../../pages/Audios";
 
 const Tab = createBottomTabNavigator();
 
@@ -46,7 +46,7 @@ export default function Container() {
             },
           }}>
 
-            <Tab.Screen name="Músicas" component={ListAudio} options={{ tabBarBadge: audiosFound }}/>
+            <Tab.Screen name="Músicas" component={Audios} options={{ tabBarBadge: audiosFound }}/>
             <Tab.Screen name="Player" component={Player}/>
             <Tab.Screen name="Playlist" component={Playlist}/>
 

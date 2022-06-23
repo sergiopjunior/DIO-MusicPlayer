@@ -9,8 +9,15 @@ import AudioOptionModal from '../AudioOptionModal';
 const imageUrl = "../../assets/images/sound.png"
 
 function ItemContainer({ navigation }) {
-    const {playLists, OpenAudioOptionModal, currentAudioInfo, PlayAudio, isPlay} = useAudio();
-
+    const {playLists, selectedPlaylist, OpenAudioOptionModal, currentAudioInfo, PlayAudio, isPlay} = useAudio();
+    const list = Object.keys(selectedPlaylist).length > 0 ? selectedPlaylist.audios : playLists[0].audios
+    if (Object.keys(selectedPlaylist).length > 0) {
+      console.log("View List");
+    }
+    else {
+      console.log("View Audios");
+    }
+    
     const RenderItem = ({ item }) => { 
       return (
             <View style={style.itemContainer}>
@@ -35,12 +42,11 @@ function ItemContainer({ navigation }) {
     return (
         <SafeAreaView style={style.listContainer}>
             <FlatList 
-                data={playLists[0].audios}
+                data={list}
                 keyExtractor={item => item.id} 
                 ItemSeparatorComponent={() => <View style={style.separator}/>}
                 renderItem={item => <RenderItem {...item}/>}
             />  
-            <AudioOptionModal visible={true} navigation={navigation}/>
         </SafeAreaView>      
     );
 }
