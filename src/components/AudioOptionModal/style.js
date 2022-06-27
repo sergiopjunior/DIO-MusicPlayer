@@ -5,7 +5,8 @@ import { normalize } from '../../assets/js/functions';
 import { useAudio } from '../../hooks/audio';
 
 export default function Container({ visible, onClose, navigation }) {
-    const {selectedAudio, selectedPlaylist, PlayAudio, currentAudioInfo, setAddToPlaylist, RemoveFromPlaylist, isPLay} = useAudio();
+    const {selectedAudio, selectedPlaylist, PlayAudio, currentAudioInfo, 
+        setAddToPlaylist, RemoveFromPlaylist, isPlay} = useAudio();
 
     return (
         <Modal animationType="slide" transparent visible={visible}>
@@ -22,8 +23,14 @@ export default function Container({ visible, onClose, navigation }) {
                     </View>
 
                     <View style={style.separator} />
-                    <TouchableOpacity onPress={() => selectedAudio.id == currentAudioInfo.id ? PlayAudio() : PlayAudio(selectedAudio)} style={style.buttonContainer}>
-                        <Text style={style.button}>Play</Text>
+                    <TouchableOpacity onPress={
+                        () => selectedAudio.id == currentAudioInfo.id ? 
+                        PlayAudio() : 
+                        PlayAudio(selectedAudio)
+                        } 
+                        style={style.buttonContainer}
+                        >
+                            <Text style={style.button}>{isPlay ? "Pause" : "Play"}</Text>        
                     </TouchableOpacity>
 
                     <View style={style.separator} />
@@ -41,7 +48,7 @@ export default function Container({ visible, onClose, navigation }) {
                         <Text style={style.button}>{Object.keys(selectedPlaylist).length > 0 ? "Remover da Playlist" : "Adicionar à Playlist"}</Text>
                     </TouchableOpacity>
             </View>
-            <TouchableWithoutFeedback onPress={onClose}>
+            <TouchableWithoutFeedback onPress={() => {onClose(); setIsModalOpen(false);}}>
                 <View style={style.modalBackground}></View>
             </TouchableWithoutFeedback>
         </Modal>

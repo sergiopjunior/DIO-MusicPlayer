@@ -22,7 +22,6 @@ const AudioProvider: React.FC = ({children}) => {
     const [playlistInputModalSate, setPlaylistInputModalSate] = useState(false);
     const [playlistViewModalState, setPlaylistViewModalState] = useState(false);
 
-    const [playListView, setPlayListView] = useState({});
     const [addToPlaylist, setAddToPlaylist] = useState({});
 
     const [isPlay, setIsPlay] = useState(false);
@@ -53,6 +52,7 @@ const AudioProvider: React.FC = ({children}) => {
         if (item) {
             setSelectedAudio(item);
             setAudioOptionModalState(true);
+            setIsModalOpen(true);
         }
     };
 

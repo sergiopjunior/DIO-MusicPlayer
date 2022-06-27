@@ -11,12 +11,12 @@ const imageUrl = "../../assets/images/sound.png"
 function ItemContainer({ navigation }) {
     const {playLists, selectedPlaylist, OpenAudioOptionModal, currentAudioInfo, PlayAudio, isPlay} = useAudio();
     const list = Object.keys(selectedPlaylist).length > 0 ? selectedPlaylist.audios : playLists[0].audios
-    if (Object.keys(selectedPlaylist).length > 0) {
-      console.log("View List");
+    /*if (Object.keys(selectedPlaylist).length > 0) {
+      console.log("View List: ", isPlay);
     }
     else {
-      console.log("View Audios");
-    }
+      console.log("View Audios: ", isPlay);
+    }*/
     
     const RenderItem = ({ item }) => { 
       return (
