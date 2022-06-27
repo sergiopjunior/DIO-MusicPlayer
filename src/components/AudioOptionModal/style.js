@@ -48,7 +48,7 @@ export default function Container({ visible, onClose, navigation }) {
                         <Text style={style.button}>{Object.keys(selectedPlaylist).length > 0 ? "Remover da Playlist" : "Adicionar à Playlist"}</Text>
                     </TouchableOpacity>
             </View>
-            <TouchableWithoutFeedback onPress={() => {onClose(); setIsModalOpen(false);}}>
+            <TouchableWithoutFeedback onPress={onClose}>
                 <View style={style.modalBackground}></View>
             </TouchableWithoutFeedback>
         </Modal>

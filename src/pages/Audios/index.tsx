@@ -11,7 +11,7 @@ const Audios: React.FC = ({ navigation }) => {
         alignItems: "center",
         backgroundColor: Colors.light_black,  }}>
         <ListAudio navigation={navigation}/>
-        <AudioOptionModal visible={false} navigation={navigation}/>
+        <AudioOptionModal navigation={navigation}/>
       </SafeAreaView>
     
   );

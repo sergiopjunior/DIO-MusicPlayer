@@ -73,10 +73,10 @@ export default function ItemContainer({ navigation }) {
                     </>
                 }
             />       
-            <PlaylistOptionModal visible={false} navigation={navigation}/>
-            <PlaylistInputModal visible={false} navigation={navigation}/>
-            <PlaylistViewModal visible={false} navigation={navigation}/>
-            <AudioOptionModal visible={false} navigation={navigation}/>
+            <PlaylistOptionModal navigation={navigation}/>
+            <PlaylistInputModal navigation={navigation}/>
+            <PlaylistViewModal navigation={navigation}/>
+            <AudioOptionModal id={2} navigation={navigation}/>          
         </SafeAreaView> 
     );
 };

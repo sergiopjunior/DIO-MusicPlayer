@@ -14,6 +14,7 @@ const AudioProvider: React.FC = ({children}) => {
     const [currentAudioInfo, setCurrentAudioInfo] = useState({});
     const [selectedAudio, setSelectedAudio] = useState({});
     const [audioOptionModalSate, setAudioOptionModalState] = useState(false);
+    const [audioOptionModalSate2, setAudioOptionModalState2] = useState(false);
 
     const [currentPlayList, setCurrentPlayList] = useState({});
     const [playLists, setPlaylists] = useState([{}]);
@@ -52,7 +53,17 @@ const AudioProvider: React.FC = ({children}) => {
         if (item) {
             setSelectedAudio(item);
             setAudioOptionModalState(true);
-            setIsModalOpen(true);
+        }
+    };
+
+    function CloseAudioOptionModal2() {
+        setAudioOptionModalState2(false);
+    };
+
+    function OpenAudioOptionModal2(item = {}) {
+        if (item) {
+            setSelectedAudio(item);
+            setAudioOptionModalState2(true);
         }
     };
 
@@ -404,6 +415,7 @@ const AudioProvider: React.FC = ({children}) => {
             selectedAudio,
             selectedPlaylist,
             audioOptionModalSate,
+            audioOptionModalSate2,
             playlistOptionModalSate,
             playlistInputModalSate,
             playlistViewModalState,
@@ -418,6 +430,8 @@ const AudioProvider: React.FC = ({children}) => {
             addToPlaylist,
             CloseAudioOptionModal, 
             OpenAudioOptionModal,
+            CloseAudioOptionModal2, 
+            OpenAudioOptionModal2,
             ClosePlaylistOptionModal,
             OpenPlaylistOptionModal,
             ClosePlaylistInputModal,
